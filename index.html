@@ -20,321 +20,62 @@
     --white: #ffffff;
   }
 
-  body {
-    font-family: 'Heebo', sans-serif;
-    background: var(--cream);
-    color: var(--dark);
-    min-height: 100vh;
-  }
+  body { font-family: 'Heebo', sans-serif; background: var(--cream); color: var(--dark); min-height: 100vh; }
 
   header {
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 32px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 16px 32px; display: flex; align-items: center; gap: 12px;
   }
-
   .logo-heart { font-size: 20px; line-height: 1; }
+  .logo-text { font-family: 'Heebo', sans-serif; font-size: 20px; font-weight: 800; color: var(--dark); letter-spacing: -0.5px; }
+  .logo-sub { font-size: 12px; color: var(--mid); margin-left: auto; font-weight: 300; }
 
-  .logo-text {
-    font-family: 'Heebo', sans-serif;
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--dark);
-    letter-spacing: -0.5px;
-  }
-
-  .logo-sub {
-    font-size: 12px;
-    color: var(--mid);
-    margin-left: auto;
-    font-weight: 300;
-  }
-
-  .hero {
-    padding: 52px 32px 36px;
-    max-width: 680px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .hero-tag {
-    display: inline-block;
-    background: var(--pink-light);
-    color: var(--dark);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 5px 14px;
-    border-radius: 100px;
-    margin-bottom: 20px;
-  }
-
-  .hero h1 {
-    font-family: 'Heebo', sans-serif;
-    font-weight: 800;
-    font-size: clamp(28px, 5vw, 42px);
-    line-height: 1.1;
-    color: var(--dark-deep);
-    margin-bottom: 14px;
-  }
-
+  .hero { padding: 52px 32px 36px; max-width: 680px; margin: 0 auto; text-align: center; }
+  .hero-tag { display: inline-block; background: var(--pink-light); color: var(--dark); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 14px; border-radius: 100px; margin-bottom: 20px; }
+  .hero h1 { font-family: 'Heebo', sans-serif; font-weight: 800; font-size: clamp(28px, 5vw, 42px); line-height: 1.1; color: var(--dark-deep); margin-bottom: 14px; }
   .hero h1 span { color: var(--pink); }
+  .hero p { font-size: 15px; color: var(--mid); line-height: 1.6; font-weight: 300; }
 
-  .hero p {
-    font-size: 15px;
-    color: var(--mid);
-    line-height: 1.6;
-    font-weight: 300;
-  }
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 36px; max-width: 640px; margin: 0 auto 32px; box-shadow: 0 2px 20px rgba(252,189,180,0.1); }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mid); margin-bottom: 14px; }
 
-  .card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 36px;
-    max-width: 640px;
-    margin: 0 auto 32px;
-    box-shadow: 0 2px 20px rgba(252,189,180,0.1);
-  }
-
-  .section-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: var(--mid);
-    margin-bottom: 14px;
-  }
-
-  .chips-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 28px;
-  }
-
-  .chip {
-    padding: 8px 16px;
-    border: 1.5px solid var(--border);
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 500;
-    font-family: 'Heebo', sans-serif;
-    cursor: pointer;
-    background: var(--white);
-    color: var(--dark);
-    transition: all 0.15s ease;
-    user-select: none;
-  }
-
+  .chips-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .chip { padding: 8px 16px; border: 1.5px solid var(--border); border-radius: 100px; font-size: 13px; font-weight: 500; font-family: 'Heebo', sans-serif; cursor: pointer; background: var(--white); color: var(--dark); transition: all 0.15s ease; user-select: none; }
   .chip:hover { border-color: var(--pink); color: var(--dark-deep); }
   .chip.active { background: var(--pink); border-color: var(--pink); color: white; }
 
   .notes-wrap { margin-bottom: 28px; }
-
-  .notes-wrap textarea {
-    width: 100%;
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    font-family: 'Heebo', sans-serif;
-    font-size: 14px;
-    font-weight: 300;
-    resize: none;
-    outline: none;
-    color: var(--dark);
-    background: var(--cream);
-    transition: border 0.15s;
-    height: 90px;
-  }
-
+  .notes-wrap textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; font-family: 'Heebo', sans-serif; font-size: 14px; font-weight: 300; resize: none; outline: none; color: var(--dark); background: var(--cream); transition: border 0.15s; height: 90px; }
   .notes-wrap textarea:focus { border-color: var(--pink); }
   .notes-wrap textarea::placeholder { color: #ccc8c7; }
 
-  .who-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 28px;
-  }
-
-  .who-btn {
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 8px;
-    font-size: 12px;
-    font-family: 'Heebo', sans-serif;
-    font-weight: 500;
-    text-align: center;
-    cursor: pointer;
-    background: var(--white);
-    color: var(--dark);
-    transition: all 0.15s;
-    user-select: none;
-  }
-
+  .who-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 28px; }
+  .who-btn { border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 8px; font-size: 12px; font-family: 'Heebo', sans-serif; font-weight: 500; text-align: center; cursor: pointer; background: var(--white); color: var(--dark); transition: all 0.15s; user-select: none; }
   .who-btn .icon { font-size: 20px; display: block; margin-bottom: 4px; }
   .who-btn:hover { border-color: var(--pink); }
   .who-btn.active { background: var(--pink); border-color: var(--pink); color: white; }
 
-  .btn-submit {
-    width: 100%;
-    padding: 15px;
-    background: var(--pink);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-family: 'Heebo', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
-    letter-spacing: 0.2px;
-  }
-
+  .btn-submit { width: 100%; padding: 15px; background: var(--pink); color: white; border: none; border-radius: 12px; font-family: 'Heebo', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.15s, transform 0.1s; }
   .btn-submit:hover { background: var(--pink-mid); }
   .btn-submit:active { transform: scale(0.99); }
-  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .loading {
-    display: none;
-    text-align: center;
-    padding: 40px;
-    max-width: 640px;
-    margin: 0 auto;
-  }
-
-  .loading.show { display: block; }
-
-  .spinner {
-    width: 36px; height: 36px;
-    border: 3px solid var(--pink-light);
-    border-top-color: var(--pink);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 16px;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading p { color: var(--mid); font-size: 14px; font-weight: 400; }
 
   .results { display: none; max-width: 640px; margin: 0 auto; }
   .results.show { display: block; }
-
   .results-header { text-align: center; margin-bottom: 24px; }
-
-  .results-header h2 {
-    font-family: 'Heebo', sans-serif;
-    font-weight: 800;
-    font-size: 26px;
-    color: var(--dark-deep);
-    margin-bottom: 6px;
-  }
-
+  .results-header h2 { font-family: 'Heebo', sans-serif; font-weight: 800; font-size: 26px; color: var(--dark-deep); margin-bottom: 6px; }
   .results-header p { color: var(--mid); font-size: 14px; font-weight: 300; }
 
-  .product-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 14px;
-    box-shadow: 0 1px 10px rgba(252,189,180,0.08);
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-
+  .product-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 14px; box-shadow: 0 1px 10px rgba(252,189,180,0.08); opacity: 0; transform: translateY(12px); transition: opacity 0.4s ease, transform 0.4s ease; }
   .product-card.visible { opacity: 1; transform: translateY(0); }
-
-  .product-rank {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--pink-mid);
-    margin-bottom: 8px;
-  }
-
-  .product-name {
-    font-family: 'Heebo', sans-serif;
-    font-weight: 700;
-    font-size: 19px;
-    color: var(--dark-deep);
-    margin-bottom: 6px;
-    line-height: 1.2;
-  }
-
-  .product-category {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--mid);
-    background: var(--cream);
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    padding: 3px 10px;
-    margin-bottom: 12px;
-  }
-
-  .product-why {
-    font-size: 14px;
-    color: var(--dark);
-    line-height: 1.65;
-    font-weight: 300;
-    margin-bottom: 16px;
-  }
-
-  .product-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 700;
-    font-family: 'Heebo', sans-serif;
-    color: var(--dark);
-    text-decoration: none;
-    border: 1.5px solid var(--pink-light);
-    border-radius: 100px;
-    padding: 7px 16px;
-    transition: all 0.15s;
-  }
-
+  .product-rank { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--pink-mid); margin-bottom: 8px; }
+  .product-name { font-family: 'Heebo', sans-serif; font-weight: 700; font-size: 19px; color: var(--dark-deep); margin-bottom: 6px; line-height: 1.2; }
+  .product-category { display: inline-block; font-size: 11px; font-weight: 500; color: var(--mid); background: var(--cream); border: 1px solid var(--border); border-radius: 100px; padding: 3px 10px; margin-bottom: 12px; }
+  .product-why { font-size: 14px; color: var(--dark); line-height: 1.65; font-weight: 300; margin-bottom: 16px; }
+  .product-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; font-family: 'Heebo', sans-serif; color: var(--dark); text-decoration: none; border: 1.5px solid var(--pink-light); border-radius: 100px; padding: 7px 16px; transition: all 0.15s; }
   .product-link:hover { background: var(--pink); color: white; border-color: var(--pink); }
 
-  .btn-reset {
-    display: block;
-    margin: 24px auto 48px;
-    background: none;
-    border: 1.5px solid var(--border);
-    border-radius: 100px;
-    font-family: 'Heebo', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--mid);
-    padding: 9px 22px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
+  .btn-reset { display: block; margin: 24px auto 48px; background: none; border: 1.5px solid var(--border); border-radius: 100px; font-family: 'Heebo', sans-serif; font-size: 13px; font-weight: 500; color: var(--mid); padding: 9px 22px; cursor: pointer; transition: all 0.15s; }
   .btn-reset:hover { border-color: var(--dark); color: var(--dark); }
-
-  .error-msg {
-    display: none;
-    text-align: center;
-    padding: 20px;
-    color: #DC2626;
-    font-size: 14px;
-    background: #FEF2F2;
-    border-radius: 10px;
-    margin: 16px 0;
-  }
-
-  .error-msg.show { display: block; }
 </style>
 </head>
 <body>
@@ -348,7 +89,7 @@
 <main style="padding: 0 16px;">
 
   <div class="hero">
-    <span class="hero-tag">Powered by AI</span>
+    <span class="hero-tag">Product Finder</span>
     <h1>Let's find what your<br>body is <span>asking for</span> ❤️</h1>
     <p>Tell us a little about how you're feeling and what you're working on — we'll hand-pick the right products from the Health Needs range, just for you.</p>
   </div>
@@ -356,18 +97,18 @@
   <div class="card" id="formCard">
     <p class="section-label">What would you like to work on?</p>
     <div class="chips-grid">
-      <div class="chip" data-val="better sleep">😴 Better sleep</div>
-      <div class="chip" data-val="more energy">⚡ More energy</div>
-      <div class="chip" data-val="stress & anxiety">🧘 Stress relief</div>
-      <div class="chip" data-val="immune support">🛡️ Immune support</div>
-      <div class="chip" data-val="gut & digestion">🫁 Gut health</div>
-      <div class="chip" data-val="skin & glow">✨ Skin & glow</div>
-      <div class="chip" data-val="hair & nails">💅 Hair & nails</div>
-      <div class="chip" data-val="weight management">⚖️ Weight management</div>
-      <div class="chip" data-val="joint & muscle pain">💪 Joint & muscles</div>
-      <div class="chip" data-val="heart health">❤️ Heart health</div>
-      <div class="chip" data-val="kids health">🧒 Kids health</div>
-      <div class="chip" data-val="pregnancy & maternity">🤰 Pregnancy</div>
+      <div class="chip" data-val="sleep">😴 Better sleep</div>
+      <div class="chip" data-val="energy">⚡ More energy</div>
+      <div class="chip" data-val="stress">🧘 Stress relief</div>
+      <div class="chip" data-val="immune">🛡️ Immune support</div>
+      <div class="chip" data-val="gut">🫁 Gut health</div>
+      <div class="chip" data-val="skin">✨ Skin & glow</div>
+      <div class="chip" data-val="hair">💅 Hair & nails</div>
+      <div class="chip" data-val="weight">⚖️ Weight management</div>
+      <div class="chip" data-val="joint">💪 Joint & muscles</div>
+      <div class="chip" data-val="heart">❤️ Heart health</div>
+      <div class="chip" data-val="kids">🧒 Kids health</div>
+      <div class="chip" data-val="pregnancy">🤰 Pregnancy</div>
     </div>
 
     <p class="section-label">Who are we shopping for?</p>
@@ -375,7 +116,7 @@
       <div class="who-btn active" data-val="adult"><span class="icon">🧑</span>Adult</div>
       <div class="who-btn" data-val="woman"><span class="icon">👩</span>Woman</div>
       <div class="who-btn" data-val="man"><span class="icon">👨</span>Man</div>
-      <div class="who-btn" data-val="child or baby"><span class="icon">👶</span>Child/Baby</div>
+      <div class="who-btn" data-val="baby"><span class="icon">👶</span>Child/Baby</div>
     </div>
 
     <p class="section-label">Anything you'd like us to know? (optional)</p>
@@ -383,16 +124,7 @@
       <textarea id="extraNotes" placeholder="e.g. I've been feeling really tired lately, I'm vegetarian, I work night shifts, I'm looking for something gentle…"></textarea>
     </div>
 
-    <div class="error-msg" id="errorMsg">Oops, something went wrong! Please try again ❤️</div>
-
-    <button class="btn-submit" id="submitBtn" onclick="getRecommendations()">
-      Show me my picks ❤️
-    </button>
-  </div>
-
-  <div class="loading" id="loadingEl">
-    <div class="spinner"></div>
-    <p>Finding your perfect match from the Health Needs range…</p>
+    <button class="btn-submit" onclick="getRecommendations()">Show me my picks ❤️</button>
   </div>
 
   <div class="results" id="resultsEl">
@@ -414,11 +146,9 @@ document.querySelectorAll('.chip').forEach(chip => {
   chip.addEventListener('click', () => {
     chip.classList.toggle('active');
     const val = chip.dataset.val;
-    if (selectedGoals.includes(val)) {
-      selectedGoals = selectedGoals.filter(g => g !== val);
-    } else {
-      selectedGoals.push(val);
-    }
+    selectedGoals = selectedGoals.includes(val)
+      ? selectedGoals.filter(g => g !== val)
+      : [...selectedGoals, val];
   });
 });
 
@@ -430,41 +160,278 @@ document.querySelectorAll('.who-btn').forEach(btn => {
   });
 });
 
-async function getRecommendations() {
+const PRODUCTS = [
+  {
+    name: "Magnetrex Magnesium Bisglycinate X30 Tablets",
+    category: "Vitamins & Minerals",
+    goals: ["sleep", "stress", "joint", "energy"],
+    who: ["adult", "woman", "man"],
+    why: {
+      sleep: "Magnesium is one of the most effective natural sleep supporters — it calms the nervous system and helps your body wind down properly at night.",
+      stress: "Magnesium plays a key role in regulating your stress response. Many people are deficient without knowing it, which makes anxiety and tension worse.",
+      joint: "This highly absorbable form of magnesium helps reduce muscle cramps and supports joint comfort, especially after exercise.",
+      energy: "Low magnesium is one of the most common reasons for unexplained fatigue. This formula is easily absorbed and gentle on the stomach.",
+      default: "Magnesium Bisglycinate is one of our most popular supplements — gentle, highly absorbable, and supports everything from sleep to muscle recovery."
+    }
+  },
+  {
+    name: "Igennus Triple Magnesium Complex X60 Tablets",
+    category: "Vitamins & Minerals",
+    goals: ["sleep", "stress", "joint", "energy"],
+    who: ["adult", "woman", "man"],
+    why: {
+      sleep: "This triple magnesium formula combines three different forms for maximum absorption — ideal if you've tried magnesium before without much effect.",
+      stress: "The combination of three magnesium types makes this especially effective for nervous system support and stress resilience.",
+      joint: "Supports muscle relaxation and joint comfort with a more complete magnesium profile than single-form supplements.",
+      energy: "Triple magnesium means better absorption across the board, making it more effective at fighting fatigue than standard magnesium.",
+      default: "A premium triple magnesium formula that covers sleep, stress, and muscle recovery all in one."
+    }
+  },
+  {
+    name: "Melatonin + Forte 5 + Valerian X60 Tablets",
+    category: "Health & Lifestyle",
+    goals: ["sleep", "stress"],
+    who: ["adult", "woman", "man"],
+    why: {
+      sleep: "Melatonin combined with valerian is one of the most effective natural combinations for falling asleep faster and sleeping more deeply.",
+      stress: "Valerian has a naturally calming effect on the nervous system, making this a great option if stress is what's keeping you up at night.",
+      default: "A powerful natural sleep formula combining melatonin and valerian root for faster sleep onset and better sleep quality."
+    }
+  },
+  {
+    name: "Quest Forte D 4000 X120 Tablets",
+    category: "Vitamins",
+    goals: ["immune", "energy", "heart"],
+    who: ["adult", "woman", "man"],
+    why: {
+      immune: "Vitamin D3 is one of the most important nutrients for a strong immune system, especially during the months when sun exposure drops.",
+      energy: "Low vitamin D is directly linked to fatigue and low mood. A high-strength dose like this can make a noticeable difference within a few weeks.",
+      heart: "Vitamin D plays an important role in cardiovascular health and is often overlooked as a heart health supplement.",
+      default: "High-strength Vitamin D3 for immune support, energy, and overall wellbeing — one of the most important supplements you can take."
+    }
+  },
+  {
+    name: "BetterYou Vitamin D3 + K2 12ml",
+    category: "Vitamins",
+    goals: ["immune", "energy", "heart", "joint"],
+    who: ["adult", "woman", "man"],
+    why: {
+      immune: "D3 and K2 together are more effective than D3 alone — K2 helps direct calcium to the right places and supports immune function.",
+      energy: "This spray format is absorbed faster than tablets, making it ideal if you want to feel the effects of vitamin D more quickly.",
+      heart: "The D3 + K2 combination is specifically recommended for cardiovascular health — K2 helps keep arteries healthy.",
+      joint: "K2 helps calcium reach your bones and joints rather than soft tissue, making this a smart choice for joint and bone support.",
+      default: "D3 and K2 in one easy spray — better absorbed than tablets and great for immune support, energy, and bone health."
+    }
+  },
+  {
+    name: "Optibac Everyday Extra Strength X90",
+    category: "Supplements – Probiotics",
+    goals: ["gut", "immune", "energy"],
+    who: ["adult", "woman", "man"],
+    why: {
+      gut: "Optibac is one of the most researched probiotic brands available. This extra strength formula is ideal for restoring and maintaining a healthy gut microbiome.",
+      immune: "Around 70% of your immune system lives in your gut. A strong probiotic like this supports your immunity from the inside out.",
+      energy: "A healthy gut absorbs nutrients more efficiently, which means better energy levels throughout the day.",
+      default: "A premium, well-researched probiotic for gut health, immunity, and overall digestive comfort."
+    }
+  },
+  {
+    name: "Via Lattea X20 Tablets",
+    category: "Health & Lifestyle",
+    goals: ["gut"],
+    who: ["adult", "woman", "man"],
+    why: {
+      gut: "Via Lattea supports digestive comfort and is particularly helpful for bloating, irregularity, and general gut discomfort.",
+      default: "A gentle and effective digestive supplement for everyday gut comfort and regularity."
+    }
+  },
+  {
+    name: "Vital Proteins Collagen Peptides 567g",
+    category: "Supplements – Collagen",
+    goals: ["skin", "hair", "joint"],
+    who: ["adult", "woman", "man"],
+    why: {
+      skin: "Collagen peptides are clinically shown to improve skin elasticity and hydration — one of the most effective supplements for a natural glow.",
+      hair: "Collagen provides the building blocks for stronger, thicker hair. Many people notice less breakage within 4–6 weeks of daily use.",
+      joint: "Collagen is a key structural protein in your joints. Regular supplementation helps maintain cartilage and reduce joint discomfort.",
+      default: "Vital Proteins is one of the most trusted collagen brands worldwide — great for skin, hair, nails, and joints all at once."
+    }
+  },
+  {
+    name: "Pantogar Hair & Nails X90 Capsules",
+    category: "Supplements",
+    goals: ["hair"],
+    who: ["adult", "woman", "man"],
+    why: {
+      hair: "Pantogar is a clinically formulated supplement specifically designed for hair and nail health — one of our bestsellers for a reason.",
+      default: "A targeted hair and nail supplement with a strong clinical track record. Results are typically visible after 3 months of consistent use."
+    }
+  },
+  {
+    name: "CeraVe Moisturising Cream",
+    category: "Skincare",
+    goals: ["skin"],
+    who: ["adult", "woman", "man", "baby"],
+    why: {
+      skin: "CeraVe is dermatologist-developed and packed with ceramides and hyaluronic acid — one of the best everyday moisturisers for healthy, glowing skin.",
+      default: "A dermatologist-recommended moisturiser that strengthens the skin barrier and keeps skin soft and hydrated all day."
+    }
+  },
+  {
+    name: "Active Iron For Women X60 Capsules",
+    category: "Minerals – Iron",
+    goals: ["energy", "hair"],
+    who: ["woman"],
+    why: {
+      energy: "Iron deficiency is one of the most common causes of fatigue in women. This gentle, non-constipating formula is specifically designed for women's needs.",
+      hair: "Low iron levels are a leading cause of hair thinning in women. This formula is absorbed twice as well as standard iron supplements.",
+      default: "A gentle iron supplement made specifically for women — great for energy and hair health without the side effects of regular iron."
+    }
+  },
+  {
+    name: "Vitabiotics Osteocare Original 90 Tablets",
+    category: "Vitamins & Minerals",
+    goals: ["joint", "heart"],
+    who: ["adult", "woman", "man"],
+    why: {
+      joint: "Osteocare combines calcium, magnesium, and vitamin D in one formula — everything your bones and joints need to stay strong.",
+      heart: "This comprehensive formula supports bone density and cardiovascular health with a well-balanced blend of key minerals.",
+      default: "A complete bone and joint support formula with calcium, magnesium, and vitamin D3 — one of our most trusted bestsellers."
+    }
+  },
+  {
+    name: "Health Aid Ashwagandha 600mg X60 Tablets",
+    category: "Supplements",
+    goals: ["stress", "energy", "sleep"],
+    who: ["adult", "woman", "man"],
+    why: {
+      stress: "Ashwagandha is one of the most well-researched adaptogens for stress relief — it helps lower cortisol and makes you feel more balanced throughout the day.",
+      energy: "By reducing the physical impact of stress on your body, ashwagandha naturally improves energy and mental clarity.",
+      sleep: "Ashwagandha helps regulate cortisol levels, which makes it easier to wind down and get deeper sleep at night.",
+      default: "A high-strength ashwagandha supplement for stress, energy, and overall resilience — perfect for busy, demanding lifestyles."
+    }
+  },
+  {
+    name: "Seven Seas Omega-3 Fish Oil",
+    category: "Supplements – Omega",
+    goals: ["heart", "joint", "energy"],
+    who: ["adult", "woman", "man"],
+    why: {
+      heart: "Omega-3 fatty acids are one of the most evidence-backed supplements for heart health — they support healthy cholesterol and blood pressure levels.",
+      joint: "Omega-3s have strong anti-inflammatory properties, which makes them very effective for reducing joint stiffness and discomfort.",
+      energy: "Omega-3s support brain function and reduce inflammation, which contributes to better mental clarity and sustained energy.",
+      default: "A trusted omega-3 fish oil supplement for heart health, joint comfort, and brain function."
+    }
+  },
+  {
+    name: "Chewy Vites Kids Multi Vitamin + Probiotic X60",
+    category: "Mother & Baby",
+    goals: ["kids", "immune", "energy", "gut"],
+    who: ["baby"],
+    why: {
+      kids: "A complete multivitamin and probiotic in one tasty gummy — everything growing kids need for immune support, energy, and a healthy gut.",
+      immune: "Packed with vitamins C, D, and zinc alongside probiotics — a great all-in-one for keeping kids healthy year-round.",
+      energy: "Essential vitamins and minerals in a format kids actually enjoy taking — supports energy, focus, and healthy development.",
+      gut: "The added probiotic supports a healthy gut microbiome in children, which is key for both digestion and immune health.",
+      default: "A delicious multivitamin + probiotic gummy that covers all the basics for children's health and wellbeing."
+    }
+  },
+  {
+    name: "BioGaia Baby Drops 5ml",
+    category: "Mother & Baby",
+    goals: ["kids", "gut"],
+    who: ["baby"],
+    why: {
+      kids: "BioGaia is one of the most researched probiotics for babies — clinically shown to reduce colic, improve digestion, and support immune health.",
+      gut: "A well-studied probiotic strain specifically for babies and young children, helping establish a healthy gut microbiome from early on.",
+      default: "A clinically proven probiotic drop for babies that supports gut health and reduces colic symptoms."
+    }
+  },
+  {
+    name: "Gestarelle G X30 Tablets",
+    category: "Mother & Baby – Pregnancy",
+    goals: ["pregnancy", "energy"],
+    who: ["woman"],
+    why: {
+      pregnancy: "Gestarelle G is specifically formulated for pregnancy, providing the key nutrients mother and baby need during this important time.",
+      energy: "Specially designed for pregnancy-related fatigue, with iron, folic acid, and B vitamins to support energy during all trimesters.",
+      default: "A trusted pregnancy supplement with essential vitamins and minerals for both mother and baby."
+    }
+  },
+  {
+    name: "Nupo One Meal + Prime",
+    category: "Health & Lifestyle",
+    goals: ["weight", "energy"],
+    who: ["adult", "woman", "man"],
+    why: {
+      weight: "Nupo One Meal replaces a full meal with controlled calories and complete nutrition — a practical and sustainable approach to weight management.",
+      energy: "A nutritionally complete meal replacement that keeps energy levels stable throughout the day without the crash of regular snacks.",
+      default: "A nutritionally complete meal replacement for weight management and sustained daily energy."
+    }
+  },
+  {
+    name: "ORS Hydration Soluble Tablets",
+    category: "Health & Lifestyle",
+    goals: ["energy", "heart"],
+    who: ["adult", "woman", "man", "baby"],
+    why: {
+      energy: "Proper hydration with electrolytes makes a big difference to energy levels — especially useful if you're active or spend time in the Maltese heat.",
+      heart: "Electrolyte balance is important for cardiovascular function. ORS tablets help maintain healthy fluid balance efficiently.",
+      default: "A fast and effective way to rehydrate and restore electrolytes — great for active lifestyles or hot weather."
+    }
+  },
+  {
+    name: "German Zinc Effervescent Peach Passionfruit X20 Tablets",
+    category: "Vitamins & Minerals",
+    goals: ["immune", "skin", "hair"],
+    who: ["adult", "woman", "man"],
+    why: {
+      immune: "Zinc is essential for a strong immune system and one of the first things to take at the first sign of illness.",
+      skin: "Zinc plays an important role in skin repair and can be particularly helpful for blemish-prone skin.",
+      hair: "Zinc deficiency is a common but overlooked cause of hair thinning — this tasty effervescent makes it easy to get your daily dose.",
+      default: "A great-tasting zinc supplement that supports immune health, skin clarity, and hair strength."
+    }
+  }
+];
+
+function getRecommendations() {
   if (selectedGoals.length === 0) {
     alert('Please select at least one goal.');
     return;
   }
 
-  const extra = document.getElementById('extraNotes').value.trim();
-  const btn = document.getElementById('submitBtn');
+  const scored = PRODUCTS
+    .filter(p => selectedWho === 'adult' || p.who.includes(selectedWho) || p.who.includes('adult'))
+    .map(product => {
+      let score = 0;
+      selectedGoals.forEach(goal => { if (product.goals.includes(goal)) score++; });
+      return { product, score };
+    })
+    .filter(p => p.score > 0)
+    .sort((a, b) => b.score - a.score);
 
-  btn.disabled = true;
-  document.getElementById('formCard').style.display = 'none';
-  document.getElementById('loadingEl').classList.add('show');
-  document.getElementById('errorMsg').classList.remove('show');
+  const top3 = scored.slice(0, 3);
 
-  try {
-    const response = await fetch('/.netlify/functions/recommend', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ goals: selectedGoals, who: selectedWho, extra })
-    });
-
-    const parsed = await response.json();
-    showResults(parsed.recommendations);
-
-  } catch (err) {
-    console.error(err);
-    document.getElementById('loadingEl').classList.remove('show');
-    document.getElementById('formCard').style.display = 'block';
-    document.getElementById('errorMsg').classList.add('show');
-    btn.disabled = false;
+  if (top3.length === 0) {
+    top3.push({ product: PRODUCTS[0], score: 1 });
+    top3.push({ product: PRODUCTS[5], score: 1 });
+    top3.push({ product: PRODUCTS[3], score: 1 });
   }
+
+  const ranks = ["Best match", "Also great", "Worth adding"];
+
+  const recs = top3.map((item, i) => {
+    const p = item.product;
+    const primaryGoal = selectedGoals.find(g => p.goals.includes(g));
+    const why = (primaryGoal && p.why[primaryGoal]) ? p.why[primaryGoal] : p.why.default;
+    return { rank: ranks[i] || "Also worth trying", name: p.name, category: p.category, why };
+  });
+
+  showResults(recs);
 }
 
 function showResults(recs) {
-  document.getElementById('loadingEl').classList.remove('show');
+  document.getElementById('formCard').style.display = 'none';
   const list = document.getElementById('productsList');
   list.innerHTML = '';
 
@@ -490,8 +457,9 @@ function showResults(recs) {
 function resetForm() {
   document.getElementById('resultsEl').classList.remove('show');
   document.getElementById('formCard').style.display = 'block';
-  document.getElementById('submitBtn').disabled = false;
   document.getElementById('productsList').innerHTML = '';
+  selectedGoals = [];
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
 }
 </script>
 </body>
