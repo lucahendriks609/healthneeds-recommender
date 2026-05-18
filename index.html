@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Needs – Find Your Product</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pink: #fcbdb4;
+    --pink-light: #fde8e5;
+    --pink-mid: #f9a89d;
+    --dark: #5c5c5e;
+    --dark-deep: #3e3e40;
+    --mid: #9a9a9c;
+    --border: #ede8e7;
+    --cream: #fdf9f8;
+    --white: #ffffff;
+  }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-heart { font-size: 20px; line-height: 1; }
+
+  .logo-text {
+    font-family: 'Heebo', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--dark);
+    letter-spacing: -0.5px;
+  }
+
+  .logo-sub {
+    font-size: 12px;
+    color: var(--mid);
+    margin-left: auto;
+    font-weight: 300;
+  }
+
+  .hero {
+    padding: 52px 32px 36px;
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background: var(--pink-light);
+    color: var(--dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Heebo', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 1.1;
+    color: var(--dark-deep);
+    margin-bottom: 14px;
+  }
+
+  .hero h1 span { color: var(--pink); }
+
+  .hero p {
+    font-size: 15px;
+    color: var(--mid);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px;
+    max-width: 640px;
+    margin: 0 auto 32px;
+    box-shadow: 0 2px 20px rgba(252,189,180,0.1);
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 14px;
+  }
+
+  .chips-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .chip {
+    padding: 8px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Heebo', sans-serif;
+    cursor: pointer;
+    background: var(--white);
+    color: var(--dark);
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+
+  .chip:hover { border-color: var(--pink); color: var(--dark-deep); }
+  .chip.active { background: var(--pink); border-color: var(--pink); color: white; }
+
+  .notes-wrap { margin-bottom: 28px; }
+
+  .notes-wrap textarea {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    resize: none;
+    outline: none;
+    color: var(--dark);
+    background: var(--cream);
+    transition: border 0.15s;
+    height: 90px;
+  }
+
+  .notes-wrap textarea:focus { border-color: var(--pink); }
+  .notes-wrap textarea::placeholder { color: #ccc8c7; }
+
+  .who-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .who-btn {
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 8px;
+    font-size: 12px;
+    font-family: 'Heebo', sans-serif;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    background: var(--white);
+    color: var(--dark);
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .who-btn .icon { font-size: 20px; display: block; margin-bottom: 4px; }
+  .who-btn:hover { border-color: var(--pink); }
+  .who-btn.active { background: var(--pink); border-color: var(--pink); color: white; }
+
+  .btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: var(--pink);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: 0.2px;
+  }
+
+  .btn-submit:hover { background: var(--pink-mid); }
+  .btn-submit:active { transform: scale(0.99); }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .loading {
+    display: none;
+    text-align: center;
+    padding: 40px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .loading.show { display: block; }
+
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--pink-light);
+    border-top-color: var(--pink);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading p { color: var(--mid); font-size: 14px; font-weight: 400; }
+
+  .results { display: none; max-width: 640px; margin: 0 auto; }
+  .results.show { display: block; }
+
+  .results-header { text-align: center; margin-bottom: 24px; }
+
+  .results-header h2 {
+    font-family: 'Heebo', sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    color: var(--dark-deep);
+    margin-bottom: 6px;
+  }
+
+  .results-header p { color: var(--mid); font-size: 14px; font-weight: 300; }
+
+  .product-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 10px rgba(252,189,180,0.08);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .product-card.visible { opacity: 1; transform: translateY(0); }
+
+  .product-rank {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--pink-mid);
+    margin-bottom: 8px;
+  }
+
+  .product-name {
+    font-family: 'Heebo', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--dark-deep);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .product-category {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--mid);
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 3px 10px;
+    margin-bottom: 12px;
+  }
+
+  .product-why {
+    font-size: 14px;
+    color: var(--dark);
+    line-height: 1.65;
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+
+  .product-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Heebo', sans-serif;
+    color: var(--dark);
+    text-decoration: none;
+    border: 1.5px solid var(--pink-light);
+    border-radius: 100px;
+    padding: 7px 16px;
+    transition: all 0.15s;
+  }
+
+  .product-link:hover { background: var(--pink); color: white; border-color: var(--pink); }
+
+  .btn-reset {
+    display: block;
+    margin: 24px auto 48px;
+    background: none;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--mid);
+    padding: 9px 22px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-reset:hover { border-color: var(--dark); color: var(--dark); }
+
+  .error-msg {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    color: #DC2626;
+    font-size: 14px;
+    background: #FEF2F2;
+    border-radius: 10px;
+    margin: 16px 0;
+  }
+
+  .error-msg.show { display: block; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo-heart">❤️</span>
+  <span class="logo-text">Health Needs</span>
+  <span class="logo-sub">Your personal health guide · Malta</span>
+</header>
+
+<main style="padding: 0 16px;">
+
+  <div class="hero">
+    <span class="hero-tag">Powered by AI</span>
+    <h1>Let's find what your<br>body is <span>asking for</span> ❤️</h1>
+    <p>Tell us a little about how you're feeling and what you're working on — we'll hand-pick the right products from the Health Needs range, just for you.</p>
+  </div>
+
+  <div class="card" id="formCard">
+    <p class="section-label">What would you like to work on?</p>
+    <div class="chips-grid">
+      <div class="chip" data-val="better sleep">😴 Better sleep</div>
+      <div class="chip" data-val="more energy">⚡ More energy</div>
+      <div class="chip" data-val="stress & anxiety">🧘 Stress relief</div>
+      <div class="chip" data-val="immune support">🛡️ Immune support</div>
+      <div class="chip" data-val="gut & digestion">🫁 Gut health</div>
+      <div class="chip" data-val="skin & glow">✨ Skin & glow</div>
+      <div class="chip" data-val="hair & nails">💅 Hair & nails</div>
+      <div class="chip" data-val="weight management">⚖️ Weight management</div>
+      <div class="chip" data-val="joint & muscle pain">💪 Joint & muscles</div>
+      <div class="chip" data-val="heart health">❤️ Heart health</div>
+      <div class="chip" data-val="kids health">🧒 Kids health</div>
+      <div class="chip" data-val="pregnancy & maternity">🤰 Pregnancy</div>
+    </div>
+
+    <p class="section-label">Who are we shopping for?</p>
+    <div class="who-grid">
+      <div class="who-btn active" data-val="adult"><span class="icon">🧑</span>Adult</div>
+      <div class="who-btn" data-val="woman"><span class="icon">👩</span>Woman</div>
+      <div class="who-btn" data-val="man"><span class="icon">👨</span>Man</div>
+      <div class="who-btn" data-val="child or baby"><span class="icon">👶</span>Child/Baby</div>
+    </div>
+
+    <p class="section-label">Anything you'd like us to know? (optional)</p>
+    <div class="notes-wrap">
+      <textarea id="extraNotes" placeholder="e.g. I've been feeling really tired lately, I'm vegetarian, I work night shifts, I'm looking for something gentle…"></textarea>
+    </div>
+
+    <div class="error-msg" id="errorMsg">Oops, something went wrong! Please try again ❤️</div>
+
+    <button class="btn-submit" id="submitBtn" onclick="getRecommendations()">
+      Show me my picks ❤️
+    </button>
+  </div>
+
+  <div class="loading" id="loadingEl">
+    <div class="spinner"></div>
+    <p>Finding your perfect match from the Health Needs range…</p>
+  </div>
+
+  <div class="results" id="resultsEl">
+    <div class="results-header">
+      <h2>Here are your picks! ❤️</h2>
+      <p>We picked these especially for you based on what you shared with us.</p>
+    </div>
+    <div id="productsList"></div>
+    <button class="btn-reset" onclick="resetForm()">← Start over</button>
+  </div>
+
+</main>
+
+<script>
+let selectedGoals = [];
+let selectedWho = 'adult';
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    chip.classList.toggle('active');
+    const val = chip.dataset.val;
+    if (selectedGoals.includes(val)) {
+      selectedGoals = selectedGoals.filter(g => g !== val);
+    } else {
+      selectedGoals.push(val);
+    }
+  });
+});
+
+document.querySelectorAll('.who-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.who-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedWho = btn.dataset.val;
+  });
+});
+
+async function getRecommendations() {
+  if (selectedGoals.length === 0) {
+    alert('Please select at least one goal.');
+    return;
+  }
+
+  const extra = document.getElementById('extraNotes').value.trim();
+  const btn = document.getElementById('submitBtn');
+
+  btn.disabled = true;
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('loadingEl').classList.add('show');
+  document.getElementById('errorMsg').classList.remove('show');
+
+  try {
+    const response = await fetch('/.netlify/functions/recommend', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goals: selectedGoals, who: selectedWho, extra })
+    });
+
+    const parsed = await response.json();
+    showResults(parsed.recommendations);
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById('loadingEl').classList.remove('show');
+    document.getElementById('formCard').style.display = 'block';
+    document.getElementById('errorMsg').classList.add('show');
+    btn.disabled = false;
+  }
+}
+
+function showResults(recs) {
+  document.getElementById('loadingEl').classList.remove('show');
+  const list = document.getElementById('productsList');
+  list.innerHTML = '';
+
+  recs.forEach((rec, i) => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <div class="product-rank">${rec.rank}</div>
+      <div class="product-name">${rec.name}</div>
+      <span class="product-category">${rec.category}</span>
+      <p class="product-why">${rec.why}</p>
+      <a class="product-link" href="https://healthneeds.com.mt/?s=${encodeURIComponent(rec.name)}" target="_blank">
+        Shop on Health Needs →
+      </a>
+    `;
+    list.appendChild(card);
+    setTimeout(() => card.classList.add('visible'), 100 + i * 150);
+  });
+
+  document.getElementById('resultsEl').classList.add('show');
+}
+
+function resetForm() {
+  document.getElementById('resultsEl').classList.remove('show');
+  document.getElementById('formCard').style.display = 'block';
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('productsList').innerHTML = '';
+}
+</script>
+</body>
+</html>
