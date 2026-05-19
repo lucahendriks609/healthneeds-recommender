@@ -152,7 +152,7 @@
   </div>
 
   <div class="results" id="resultsEl">
-    <div class="results-header">
+    <div class="results-header" id="resultsHeader">
       <h2>Here are your picks! ❤️</h2>
       <p>We picked these based on what you shared with us.</p>
     </div>
@@ -169,26 +169,36 @@
 let selectedChips = [];
 let selectedWho = 'adult';
 
+const chipLabels = {
+  sleep: 'sleep issues', energy: 'low energy', stress: 'stress',
+  immune: 'immune support', gut: 'gut health', skin: 'skin',
+  hair: 'hair and nails', weight: 'weight management',
+  joint: 'joint and muscle pain', heart: 'heart health',
+  kids: 'kids health', pregnancy: 'pregnancy'
+};
+
 document.querySelectorAll('.chip').forEach(chip => {
   chip.addEventListener('click', () => {
     chip.classList.toggle('active');
     const val = chip.dataset.val;
-    selectedChips = selectedChips.includes(val)
-      ? selectedChips.filter(g => g !== val)
-      : [...selectedChips, val];
+    const label = chipLabels[val];
 
-    // Also append to textarea
-    const textarea = document.getElementById('freeText');
-    const chipLabels = {
-      sleep: 'sleep issues', energy: 'low energy', stress: 'stress',
-      immune: 'immune support', gut: 'gut health', skin: 'skin',
-      hair: 'hair and nails', weight: 'weight management',
-      joint: 'joint and muscle pain', heart: 'heart health',
-      kids: 'kids health', pregnancy: 'pregnancy'
-    };
-    if (chip.classList.contains('active')) {
+    if (selectedChips.includes(val)) {
+      // Deselect — remove from array and from textarea
+      selectedChips = selectedChips.filter(g => g !== val);
+      const textarea = document.getElementById('freeText');
+      // Remove the label whether it appears alone, at start, middle or end
+      textarea.value = textarea.value
+        .replace(new RegExp(',\\s*' + label, 'g'), '')
+        .replace(new RegExp(label + '\\s*,\\s*', 'g'), '')
+        .replace(new RegExp('^' + label + '$', 'g'), '')
+        .trim();
+    } else {
+      // Select — add to array and append to textarea
+      selectedChips = [...selectedChips, val];
+      const textarea = document.getElementById('freeText');
       const current = textarea.value.trim();
-      textarea.value = current ? current + ', ' + chipLabels[val] : chipLabels[val];
+      textarea.value = current ? current + ', ' + label : label;
     }
   });
 });
@@ -549,24 +559,51 @@ function getRecommendations() {
     selectedWho = 'woman';
   }
 
-  const scored = PRODUCTS
-    .filter(p => selectedWho === 'adult' || p.who.includes(selectedWho) || p.who.includes('adult'))
+  // Hard who filter — strict, no fallback to adult for baby
+  const whoFiltered = PRODUCTS.filter(p => {
+    if (selectedWho === 'baby') return p.who.includes('baby');
+    if (selectedWho === 'woman') return p.who.includes('woman') || (p.who.includes('adult') && !p.who.includes('baby'));
+    if (selectedWho === 'man') return p.who.includes('man') || (p.who.includes('adult') && !p.who.includes('baby'));
+    return p.who.includes('adult') && !p.who.includes('baby');
+  });
+
+  // Score: reward specificity — products with fewer goals that still match score higher
+  const scored = whoFiltered
     .map(product => {
-      let score = 0;
-      allGoals.forEach(goal => { if (product.goals.includes(goal)) score++; });
-      return { product, score };
+      const matchedGoals = allGoals.filter(g => product.goals.includes(g));
+      if (matchedGoals.length === 0) return { product, score: 0 };
+
+      // Specificity bonus: product covering fewer total goals = more targeted
+      const specificity = 1 / product.goals.length;
+      // Match ratio: what % of user goals does this product cover
+      const matchRatio = matchedGoals.length / Math.max(allGoals.length, 1);
+      // Raw match count still matters but is weighted down for broad products
+      const score = (matchedGoals.length * 2) + (specificity * 3) + (matchRatio * 2);
+
+      return { product, score, matchedGoals };
     })
     .filter(p => p.score > 0)
     .sort((a, b) => b.score - a.score);
 
-  let top3 = scored.slice(0, 3);
+  // Deduplicate categories — don't show 3 magnesium products
+  const seen = new Set();
+  const deduped = [];
+  for (const item of scored) {
+    const cat = item.product.category;
+    const name = item.product.name.split(' ')[0]; // first word as loose dedup key
+    const key = `${cat}-${name}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      deduped.push(item);
+    }
+    if (deduped.length === 3) break;
+  }
+
+  let top3 = deduped.length > 0 ? deduped : scored.slice(0, 3);
 
   if (top3.length === 0) {
-    top3 = [
-      { product: PRODUCTS[0], score: 1 },
-      { product: PRODUCTS[5], score: 1 },
-      { product: PRODUCTS[3], score: 1 }
-    ];
+    showNoResults();
+    return;
   }
 
   const ranks = ["Best match", "Also great", "Worth adding"];
@@ -589,8 +626,24 @@ function getRecommendations() {
   showResults(recs);
 }
 
+function showNoResults() {
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('resultsHeader').style.display = 'none';
+  const list = document.getElementById('productsList');
+  list.innerHTML = `
+    <div style="text-align:center; padding: 40px 20px;">
+      <div style="font-size: 36px; margin-bottom: 16px;">🤍</div>
+      <h3 style="font-family: Heebo, sans-serif; font-weight: 800; font-size: 20px; color: #3e3e40; margin-bottom: 10px;">We couldn't find a match for this combination.</h3>
+      <p style="font-size: 14px; color: #9a9a9c; font-weight: 300; line-height: 1.6; max-width: 380px; margin: 0 auto 20px;">It looks like the details you entered don't match any products in our current range. Try adjusting your selection, or visit <a href="https://healthneeds.com.mt" target="_blank" style="color: #fcbdb4; font-weight: 600;">healthneeds.com.mt</a> to browse our full range.</p>
+    </div>
+  `;
+  document.getElementById('resultsEl').classList.add('show');
+}
+
 function showResults(recs) {
   document.getElementById('formCard').style.display = 'none';
+  const header = document.getElementById('resultsHeader');
+  if (header) header.style.display = 'block';
   const list = document.getElementById('productsList');
   list.innerHTML = '';
 
@@ -623,6 +676,8 @@ function showResults(recs) {
 
 function resetForm() {
   document.getElementById('resultsEl').classList.remove('show');
+  const header = document.getElementById('resultsHeader');
+  if (header) header.style.display = 'block';
   document.getElementById('formCard').style.display = 'block';
   document.getElementById('productsList').innerHTML = '';
   document.getElementById('freeText').value = '';
