@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Needs – Caption Writer</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pink: #fcbdb4;
+    --pink-light: #fde8e5;
+    --pink-mid: #f9a89d;
+    --dark: #5c5c5e;
+    --dark-deep: #3e3e40;
+    --mid: #9a9a9c;
+    --border: #ede8e7;
+    --cream: #fdf9f8;
+    --white: #ffffff;
+  }
+
+  body { font-family: 'Heebo', sans-serif; background: var(--cream); color: var(--dark); min-height: 100vh; }
+
+  header {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 16px 32px; display: flex; align-items: center; gap: 12px;
+  }
+  .logo-heart { font-size: 20px; }
+  .logo-text { font-size: 20px; font-weight: 800; color: var(--dark); letter-spacing: -0.5px; }
+  .logo-sub { font-size: 12px; color: var(--mid); margin-left: auto; font-weight: 300; }
+
+  .hero { padding: 48px 32px 32px; max-width: 720px; margin: 0 auto; text-align: center; }
+  .hero-tag { display: inline-block; background: var(--pink-light); color: var(--dark); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 14px; border-radius: 100px; margin-bottom: 18px; }
+  .hero h1 { font-weight: 800; font-size: clamp(26px, 4vw, 38px); line-height: 1.1; color: var(--dark-deep); margin-bottom: 12px; }
+  .hero h1 span { color: var(--pink); }
+  .hero p { font-size: 15px; color: var(--mid); line-height: 1.6; font-weight: 300; }
+
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  @media (max-width: 720px) {
+    .main-grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--white); border: 1px solid var(--border); border-radius: 20px;
+    padding: 28px; box-shadow: 0 2px 20px rgba(252,189,180,0.08);
+  }
+
+  .card-title { font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--mid); margin-bottom: 20px; }
+
+  /* Form elements */
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 7px; letter-spacing: 0.3px; }
+
+  .field input, .field textarea, .field select {
+    width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 11px 14px; font-family: 'Heebo', sans-serif; font-size: 14px;
+    font-weight: 400; outline: none; color: var(--dark); background: var(--cream);
+    transition: border 0.15s; appearance: none;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--pink); background: var(--white); }
+  .field textarea { resize: none; height: 80px; }
+  .field input::placeholder, .field textarea::placeholder { color: #ccc; font-weight: 300; }
+
+  /* Tone chips */
+  .tone-grid { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tone-chip {
+    padding: 6px 13px; border: 1.5px solid var(--border); border-radius: 100px;
+    font-size: 12px; font-weight: 500; cursor: pointer; background: var(--white);
+    color: var(--dark); transition: all 0.15s; user-select: none;
+  }
+  .tone-chip:hover { border-color: var(--pink); }
+  .tone-chip.active { background: var(--pink); border-color: var(--pink); color: white; }
+
+  /* Platform chips */
+  .platform-grid { display: flex; gap: 7px; flex-wrap: wrap; }
+  .platform-chip {
+    padding: 6px 13px; border: 1.5px solid var(--border); border-radius: 100px;
+    font-size: 12px; font-weight: 500; cursor: pointer; background: var(--white);
+    color: var(--dark); transition: all 0.15s; user-select: none;
+  }
+  .platform-chip:hover { border-color: var(--pink); }
+  .platform-chip.active { background: var(--pink); border-color: var(--pink); color: white; }
+
+  .btn-generate {
+    width: 100%; padding: 14px; background: var(--pink); color: white; border: none;
+    border-radius: 12px; font-family: 'Heebo', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: background 0.15s, transform 0.1s; margin-top: 6px;
+  }
+  .btn-generate:hover { background: var(--pink-mid); }
+  .btn-generate:active { transform: scale(0.99); }
+
+  /* Results panel */
+  .results-panel { display: flex; flex-direction: column; gap: 16px; }
+
+  .caption-card {
+    background: var(--cream); border: 1.5px solid var(--border); border-radius: 14px;
+    padding: 20px; position: relative; opacity: 0; transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .caption-card.visible { opacity: 1; transform: translateY(0); }
+
+  .caption-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase;
+    color: var(--pink-mid); margin-bottom: 10px;
+  }
+
+  .caption-text {
+    font-size: 13.5px; line-height: 1.7; color: var(--dark-deep); font-weight: 400;
+    white-space: pre-wrap; margin-bottom: 14px;
+  }
+
+  .caption-actions { display: flex; gap: 8px; }
+
+  .btn-copy {
+    padding: 7px 16px; background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 100px; font-family: 'Heebo', sans-serif; font-size: 12px; font-weight: 700;
+    color: var(--dark); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 5px;
+  }
+  .btn-copy:hover { border-color: var(--pink); color: var(--dark-deep); }
+  .btn-copy.copied { background: var(--pink); border-color: var(--pink); color: white; }
+
+  .empty-state {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100%; min-height: 320px; text-align: center; color: var(--mid);
+  }
+  .empty-icon { font-size: 40px; margin-bottom: 14px; opacity: 0.4; }
+  .empty-state p { font-size: 14px; font-weight: 300; line-height: 1.6; }
+
+  .divider { height: 1px; background: var(--border); margin: 4px 0 18px; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo-heart">❤️</span>
+  <span class="logo-text">Health Needs</span>
+  <span class="logo-sub">Caption Writer</span>
+</header>
+
+<main>
+  <div class="hero">
+    <span class="hero-tag">Content Tool</span>
+    <h1>Write captions that <span>actually convert</span> ❤️</h1>
+    <p>Fill in what you're posting about and get 3 ready-to-use captions — warm, trustworthy, and very Health Needs.</p>
+  </div>
+
+  <div class="main-grid">
+
+    <!-- Left: Input -->
+    <div class="card">
+      <p class="card-title">Your post details</p>
+
+      <div class="field">
+        <label>What is the post about?</label>
+        <input type="text" id="topic" placeholder="e.g. Magnesium supplement, suncare range, weight loss products…">
+      </div>
+
+      <div class="field">
+        <label>Specific product or offer? (optional)</label>
+        <input type="text" id="product" placeholder="e.g. Magnetrex Magnesium, free delivery over €25…">
+      </div>
+
+      <div class="field">
+        <label>What type of post?</label>
+        <select id="postType">
+          <option value="product">Product highlight</option>
+          <option value="lifestyle">Lifestyle / relatable</option>
+          <option value="educational">Educational / tips</option>
+          <option value="promo">Promotion / offer</option>
+          <option value="behindthescenes">Behind the scenes</option>
+          <option value="ugc">Customer story / UGC</option>
+          <option value="seasonal">Seasonal / occasion</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Tone ❤️</label>
+        <div class="tone-grid" id="toneGrid">
+          <div class="tone-chip active" data-val="warm">Warm & friendly</div>
+          <div class="tone-chip" data-val="funny">A bit funny</div>
+          <div class="tone-chip" data-val="informative">Informative</div>
+          <div class="tone-chip" data-val="motivational">Motivational</div>
+          <div class="tone-chip" data-val="urgent">Sense of urgency</div>
+          <div class="tone-chip" data-val="minimal">Short & punchy</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Platform</label>
+        <div class="platform-grid" id="platformGrid">
+          <div class="platform-chip active" data-val="instagram">Instagram</div>
+          <div class="platform-chip" data-val="facebook">Facebook</div>
+          <div class="platform-chip" data-val="tiktok">TikTok</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Anything else to include? (optional)</label>
+        <textarea id="extra" placeholder="e.g. mention Malta/Gozo delivery, link in bio, specific hashtags you want…"></textarea>
+      </div>
+
+      <div class="divider"></div>
+      <button class="btn-generate" onclick="generateCaptions()">Generate captions ❤️</button>
+    </div>
+
+    <!-- Right: Results -->
+    <div class="card">
+      <p class="card-title">Your captions</p>
+      <div class="results-panel" id="resultsPanel">
+        <div class="empty-state">
+          <div class="empty-icon">✍️</div>
+          <p>Fill in your post details on the left<br>and we'll generate 3 captions for you.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+let selectedTone = 'warm';
+let selectedPlatform = 'instagram';
+
+document.querySelectorAll('.tone-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    selectedTone = chip.dataset.val;
+  });
+});
+
+document.querySelectorAll('.platform-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.platform-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    selectedPlatform = chip.dataset.val;
+  });
+});
+
+// Caption templates based on real Health Needs style
+const TEMPLATES = {
+  product: {
+    warm: [
+      `{hook}\n\n{product_line}Whether you're looking to feel better, sleep deeper, or just take better care of yourself — we've got you covered. ❤️\n\nShop now via the link in bio.\nFree delivery on orders above €25 🛵\n\n{hashtags}`,
+      `Not all {topic} are created equal. 👀\n\n{product_line}Trusted. Tested. Delivered to your door anywhere in Malta & Gozo.\n\nShop the full range at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Your body works hard for you. Time to return the favour. 💪\n\n{product_line}Available now at healthneeds.com.mt — free delivery on orders above €25.\n\n{hashtags}`
+    ],
+    funny: [
+      `POV: You finally stopped ignoring your body's "check engine" light. 😂\n\n{product_line}Shop now via the link in bio. Your future self will thank you.\n\n{hashtags}`,
+      `We're not saying {topic} will change your life... but also, it kind of might. 👀\n\n{product_line}Link in bio. Free delivery on orders above €25 🛵\n\n{hashtags}`,
+      `Your body sent another strongly worded email. This time, listen to it. 😅\n\n{product_line}healthneeds.com.mt — Malta & Gozo delivery.\n\n{hashtags}`
+    ],
+    informative: [
+      `Did you know? {topic_fact}\n\n{product_line}Find everything you need at healthneeds.com.mt ❤️\nFree delivery on orders above €25.\n\n{hashtags}`,
+      `Here's what most people don't realise about {topic}: consistency is everything.\n\n{product_line}Shop the full range via the link in bio.\n\n{hashtags}`,
+      `{topic} — here's why it matters more than you think.\n\n{product_line}Available at healthneeds.com.mt. Free delivery on orders above €25 🛵\n\n{hashtags}`
+    ],
+    motivational: [
+      `Small steps, big results. Starting with {topic}. ❤️\n\n{product_line}Shop now via the link in bio.\nFree delivery on orders above €25.\n\n{hashtags}`,
+      `You don't need a perfect plan. You just need to start. 💪\n\n{product_line}healthneeds.com.mt — delivered to your door in Malta & Gozo.\n\n{hashtags}`,
+      `The best time to start taking care of yourself was yesterday. The second best time is right now. ❤️\n\n{product_line}Link in bio. Free delivery on orders above €25 🛵\n\n{hashtags}`
+    ],
+    urgent: [
+      `Don't wait until you're running low. Restock now. 👇\n\n{product_line}Shop via the link in bio — fast delivery across Malta & Gozo.\n\n{hashtags}`,
+      `Your {topic} stash won't refill itself. ⏰\n\n{product_line}Order now at healthneeds.com.mt. Free delivery on orders above €25.\n\n{hashtags}`,
+      `Running out soon? Don't let it happen. 🚨\n\n{product_line}Link in bio. Same-day delivery available on orders above €50. 🛵\n\n{hashtags}`
+    ],
+    minimal: [
+      `{topic}. Simple as that. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`,
+      `Less searching, more feeling good. 👇\n\n{product_line}healthneeds.com.mt\n\n{hashtags}`,
+      `This is your sign to restock. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`
+    ]
+  },
+  lifestyle: {
+    warm: [
+      `Some days you're on top of the world. Other days you just need a little help. And that's completely okay. ❤️\n\n{product_line}We've got you, Malta. Shop via the link in bio.\n\n{hashtags}`,
+      `Taking care of yourself isn't a luxury. It's a necessity. 💛\n\n{product_line}Shop our full range at healthneeds.com.mt\nFree delivery on orders above €25.\n\n{hashtags}`,
+      `Real wellness isn't about being perfect. It's about showing up for yourself every day. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`
+    ],
+    funny: [
+      `Self-care level: actually opened the Health Needs app instead of googling my symptoms at 2am. 😂\n\n{product_line}Link in bio. You're welcome.\n\n{hashtags}`,
+      `Us: get some rest, drink water, take your supplements.\nAlso us: *sends this at midnight* 😅\n\n{product_line}healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Adulting is hard. At least your health routine doesn't have to be. 😂\n\n{product_line}Shop via the link in bio.\n\n{hashtags}`
+    ],
+    informative: [
+      `A small daily habit can make a big difference over time. Here's where to start. 👇\n\n{product_line}Shop at healthneeds.com.mt — free delivery on orders above €25.\n\n{hashtags}`,
+      `Wellness isn't a destination, it's a routine. And every great routine starts somewhere. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`,
+      `Here's something worth knowing about {topic}.\n\n{product_line}healthneeds.com.mt — delivered to Malta & Gozo.\n\n{hashtags}`
+    ],
+    motivational: [
+      `You've got this. And we've got everything you need to keep going. 💪\n\n{product_line}Link in bio. Free delivery on orders above €25.\n\n{hashtags}`,
+      `Start small. Stay consistent. Feel the difference. ❤️\n\n{product_line}Shop at healthneeds.com.mt\n\n{hashtags}`,
+      `One good choice leads to another. Start here. 👇\n\n{product_line}Link in bio. 🛵\n\n{hashtags}`
+    ],
+    urgent: [
+      `Your routine is calling. Don't keep it waiting. ⏰\n\n{product_line}Fast delivery across Malta & Gozo. Link in bio.\n\n{hashtags}`,
+      `Don't break the streak. Restock before you run out. 🚨\n\n{product_line}healthneeds.com.mt — same-day delivery on orders above €50.\n\n{hashtags}`,
+      `This week's reminder to actually take care of yourself. 👀\n\n{product_line}Link in bio.\n\n{hashtags}`
+    ],
+    minimal: [
+      `Good vibes start with good habits. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`,
+      `Take care of yourself. You deserve it. 💛\n\n{product_line}healthneeds.com.mt\n\n{hashtags}`,
+      `Routine. Consistency. Results. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`
+    ]
+  },
+  educational: {
+    warm: [
+      `Here's something your body will thank you for knowing. 👇\n\n{topic_info}\n\n{product_line}Shop the full range at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `We love a good health fact. Especially when there's a great product to go with it. 💛\n\n{topic_info}\n\n{product_line}Link in bio. Free delivery on orders above €25.\n\n{hashtags}`,
+      `A little knowledge goes a long way. 📚\n\n{topic_info}\n\n{product_line}Find it at healthneeds.com.mt ❤️\n\n{hashtags}`
+    ],
+    funny: [
+      `Things your doctor wishes you knew. (We're not doctors, but still.) 😂\n\n{topic_info}\n\n{product_line}Link in bio.\n\n{hashtags}`,
+      `Plot twist: taking care of yourself doesn't have to be complicated. 😅\n\n{topic_info}\n\n{product_line}healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Science said it. We're just the messenger. 🤷\n\n{topic_info}\n\n{product_line}Shop via the link in bio.\n\n{hashtags}`
+    ],
+    informative: [
+      `Worth knowing: {topic_info}\n\n{product_line}Available at healthneeds.com.mt — free delivery on orders above €25.\n\n{hashtags}`,
+      `A quick guide to {topic}:\n\n{topic_info}\n\n{product_line}Shop the full range at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Everything you need to know about {topic} — in one post. 👇\n\n{topic_info}\n\n{product_line}Link in bio.\n\n{hashtags}`
+    ],
+    motivational: [
+      `Knowledge is power. And now you can put it into action. 💪\n\n{topic_info}\n\n{product_line}Shop at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `You've got the information. Now take the first step. 👇\n\n{topic_info}\n\n{product_line}Free delivery on orders above €25. Link in bio.\n\n{hashtags}`,
+      `Information → action → results. Let's go. 💛\n\n{topic_info}\n\n{product_line}healthneeds.com.mt\n\n{hashtags}`
+    ],
+    urgent: [
+      `Don't sleep on this one. (Ironic, because it might actually help you sleep better.) 😅\n\n{topic_info}\n\n{product_line}Link in bio. Order today.\n\n{hashtags}`,
+      `The sooner you know, the sooner you can feel better. 👇\n\n{topic_info}\n\n{product_line}Fast delivery across Malta & Gozo.\n\n{hashtags}`,
+      `Your body has been trying to tell you this. 👀\n\n{topic_info}\n\n{product_line}Shop now at healthneeds.com.mt ❤️\n\n{hashtags}`
+    ],
+    minimal: [
+      `Quick health tip. ❤️\n\n{topic_info}\n\n{product_line}Link in bio.\n\n{hashtags}`,
+      `Worth knowing. Worth acting on. 👇\n\n{topic_info}\n\n{product_line}healthneeds.com.mt\n\n{hashtags}`,
+      `Good to know. Easy to fix. ❤️\n\n{topic_info}\n\n{product_line}Link in bio.\n\n{hashtags}`
+    ]
+  },
+  promo: {
+    warm: [
+      `Good news for your wallet — and your health. 💛\n\n{product_line}Free delivery on all orders above €25. Shop now at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Because taking care of yourself shouldn't cost a fortune. ❤️\n\n{product_line}Shop via the link in bio. Free delivery on orders above €25 🛵\n\n{hashtags}`,
+      `A little treat for yourself? We think yes. 💛\n\n{product_line}healthneeds.com.mt — free delivery on orders above €25.\n\n{hashtags}`
+    ],
+    funny: [
+      `Your bank account is crying but your body is thriving. 😂\n\n{product_line}Free delivery on orders above €25. You're welcome. Link in bio.\n\n{hashtags}`,
+      `Treat yourself. You've earned it. (We don't need to know what for.) 😅\n\n{product_line}Shop at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `This is your sign to add to cart. 🛒\n\n{product_line}Free delivery on orders above €25 at healthneeds.com.mt\n\n{hashtags}`
+    ],
+    informative: [
+      `Here's what you get with Health Needs:\n✅ Trusted brands\n✅ Free delivery on orders above €25\n✅ Fast Malta & Gozo delivery\n\n{product_line}Shop now via the link in bio.\n\n{hashtags}`,
+      `Quality health products, delivered to your door. That's the Health Needs promise. ❤️\n\n{product_line}Free delivery on orders above €25. Link in bio.\n\n{hashtags}`,
+      `Why Health Needs?\n— Over 4,500 products\n— Free delivery above €25\n— Same-day delivery available\n— 5-star rated by our customers ⭐\n\n{product_line}healthneeds.com.mt\n\n{hashtags}`
+    ],
+    motivational: [
+      `Invest in yourself. It pays the best interest. 💪\n\n{product_line}Free delivery on orders above €25. Link in bio.\n\n{hashtags}`,
+      `Your health is worth it. Always. ❤️\n\n{product_line}Shop at healthneeds.com.mt — Malta & Gozo delivery.\n\n{hashtags}`,
+      `Start today. Feel the difference tomorrow. 💛\n\n{product_line}Link in bio. Free delivery on orders above €25.\n\n{hashtags}`
+    ],
+    urgent: [
+      `Don't miss out. 👇\n\n{product_line}Order now at healthneeds.com.mt — fast delivery across Malta & Gozo. 🛵\n\n{hashtags}`,
+      `Limited time. Unlimited benefit. ⏰\n\n{product_line}Shop via the link in bio before it's gone.\n\n{hashtags}`,
+      `Today's the day. Seriously. 🚨\n\n{product_line}healthneeds.com.mt — same-day delivery on orders above €50.\n\n{hashtags}`
+    ],
+    minimal: [
+      `Good products. Fair prices. Fast delivery. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`,
+      `Shop smart. Feel great. 💛\n\n{product_line}healthneeds.com.mt\n\n{hashtags}`,
+      `Health Needs. Always. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`
+    ]
+  },
+  behindthescenes: {
+    warm: [
+      `A day in the life at Health Needs. 📦\n\n{product_line}Every order packed with care and sent straight to your door across Malta & Gozo. ❤️\n\nShop at healthneeds.com.mt\n\n{hashtags}`,
+      `This is what happens before your order arrives. 👀\n\n{product_line}We know this warehouse better than we know ourselves at this point. 😂\n\nShop at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Behind every delivery is a team that genuinely cares. 💛\n\n{product_line}From our hands to your door. healthneeds.com.mt\n\n{hashtags}`
+    ],
+    funny: [
+      `POV: You ordered from Health Needs and we're already running. 😂\n\n{product_line}Fast delivery across Malta & Gozo. Link in bio.\n\n{hashtags}`,
+      `We know this warehouse better than we know ourselves at this point. 😂\n\n{product_line}Worth it for you though. Shop at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Day 47 of picking orders. Send help. (Just kidding — we love it.) 😅\n\n{product_line}Link in bio. Free delivery on orders above €25 🛵\n\n{hashtags}`
+    ],
+    informative: [
+      `Here's how your Health Needs order goes from warehouse to your door. 📦\n\n{product_line}Order before 1PM for same-day delivery on orders above €50.\nhealthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Every product we stock is carefully selected and quality checked. Because you deserve nothing less. ❤️\n\n{product_line}Shop at healthneeds.com.mt — free delivery on orders above €25.\n\n{hashtags}`,
+      `Over 4,500 products. One warehouse. A very dedicated team. 💛\n\n{product_line}Shop the full range at healthneeds.com.mt\n\n{hashtags}`
+    ],
+    motivational: [
+      `We show up every day so you can show up for yourself. ❤️\n\n{product_line}Shop at healthneeds.com.mt\n\n{hashtags}`,
+      `Behind every healthy habit is someone who made it easy to start. That's us. 💛\n\n{product_line}Link in bio. Free delivery on orders above €25.\n\n{hashtags}`,
+      `Your wellness journey matters. And we're here for every step of it. ❤️\n\n{product_line}healthneeds.com.mt\n\n{hashtags}`
+    ],
+    urgent: [
+      `Orders going out now. Yours could be next. 🚨\n\n{product_line}Order before 1PM for same-day delivery. healthneeds.com.mt 🛵\n\n{hashtags}`,
+      `The team is packing. Are you ready to order? ⏰\n\n{product_line}Fast delivery across Malta & Gozo. Link in bio.\n\n{hashtags}`,
+      `Real time update: we're busy, but never too busy for your order. 📦\n\n{product_line}Shop now at healthneeds.com.mt ❤️\n\n{hashtags}`
+    ],
+    minimal: [
+      `Packed with care. Delivered with love. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`,
+      `From our warehouse to your door. 📦\n\n{product_line}healthneeds.com.mt\n\n{hashtags}`,
+      `This is what we do every day. For you. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`
+    ]
+  },
+  ugc: {
+    warm: [
+      `This made our day. ❤️\n\n{product_line}Thank you to everyone who trusts Health Needs with their health journey. We don't take it lightly. 💛\n\nShop at healthneeds.com.mt\n\n{hashtags}`,
+      `Real customers. Real results. Real love. ❤️\n\n{product_line}This is why we do what we do. Shop at healthneeds.com.mt\n\n{hashtags}`,
+      `When our customers are happy, we're happy. 💛\n\n{product_line}Join the Health Needs family. Shop via the link in bio.\n\n{hashtags}`
+    ],
+    funny: [
+      `We didn't pay for this review. We promise. 😂\n\n{product_line}Shop at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Our team when they see a 5-star review: 🥹\n\n{product_line}Keep them coming. Link in bio.\n\n{hashtags}`,
+      `Plot twist: our customers are just really great people. 😅\n\n{product_line}Shop at healthneeds.com.mt ❤️\n\n{hashtags}`
+    ],
+    informative: [
+      `Here's what our customers are saying about {topic}. 👇\n\n{product_line}Join thousands of happy customers across Malta & Gozo. healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Rated 5 stars by real people, just like you. ⭐\n\n{product_line}Shop at healthneeds.com.mt — free delivery on orders above €25.\n\n{hashtags}`,
+      `Don't just take our word for it. 👇\n\n{product_line}Shop via the link in bio. Free delivery on orders above €25.\n\n{hashtags}`
+    ],
+    motivational: [
+      `Your story could be next. Start your health journey with Health Needs today. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`,
+      `Real people, real results. You can do this too. 💪\n\n{product_line}Shop at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `One step at a time. Our customers know it. Now it's your turn. 💛\n\n{product_line}Link in bio.\n\n{hashtags}`
+    ],
+    urgent: [
+      `People are already feeling the difference. Don't miss out. 👀\n\n{product_line}Shop now at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Your body is waiting. Our customers already figured it out. ⏰\n\n{product_line}Link in bio. Fast delivery across Malta & Gozo.\n\n{hashtags}`,
+      `Join them. Start today. 🚨\n\n{product_line}healthneeds.com.mt — same-day delivery on orders above €50.\n\n{hashtags}`
+    ],
+    minimal: [
+      `5 stars. Every time. ⭐\n\n{product_line}Link in bio.\n\n{hashtags}`,
+      `Happy customers make us happy. ❤️\n\n{product_line}healthneeds.com.mt\n\n{hashtags}`,
+      `Real people. Real results. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`
+    ]
+  },
+  seasonal: {
+    warm: [
+      `{season_hook}\n\n{product_line}We've got everything you need to feel your best this season. ❤️\nShop at healthneeds.com.mt — free delivery on orders above €25.\n\n{hashtags}`,
+      `It's that time of year again. 🌿\n\n{product_line}Stock up before the season hits. healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `{season_hook} And Health Needs has got you covered. 💛\n\n{product_line}Link in bio. Free delivery on orders above €25.\n\n{hashtags}`
+    ],
+    funny: [
+      `{season_hook} Time to stock up. Your body will thank you. (Unlike your alarm clock.) 😂\n\n{product_line}Link in bio. healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Seasonal wellness is not optional. We don't make the rules. 😅\n\n{product_line}Shop at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `The season is coming. Are you ready? (Your supplements better be.) 😂\n\n{product_line}Link in bio.\n\n{hashtags}`
+    ],
+    informative: [
+      `{season_hook} Here's what to stock up on. 👇\n\n{product_line}Shop the full range at healthneeds.com.mt ❤️\n\n{hashtags}`,
+      `Every season brings different health needs. Here's what to focus on now. 👇\n\n{product_line}Free delivery on orders above €25. Link in bio.\n\n{hashtags}`,
+      `Seasonal health tip: {topic_info}\n\n{product_line}Shop at healthneeds.com.mt ❤️\n\n{hashtags}`
+    ],
+    motivational: [
+      `New season, new commitment to yourself. ❤️\n\n{product_line}Shop at healthneeds.com.mt — delivered across Malta & Gozo.\n\n{hashtags}`,
+      `Every season is a fresh start. Make it count. 💛\n\n{product_line}Link in bio.\n\n{hashtags}`,
+      `This season, prioritise yourself. You deserve it. ❤️\n\n{product_line}healthneeds.com.mt\n\n{hashtags}`
+    ],
+    urgent: [
+      `Stock up before the season hits. You'll thank yourself later. ⏰\n\n{product_line}Shop now at healthneeds.com.mt 🛵\n\n{hashtags}`,
+      `Don't wait until everyone else is sold out. 🚨\n\n{product_line}Fast delivery across Malta & Gozo. Link in bio.\n\n{hashtags}`,
+      `The season is here. Your routine should be ready. 👀\n\n{product_line}Same-day delivery on orders above €50. healthneeds.com.mt ❤️\n\n{hashtags}`
+    ],
+    minimal: [
+      `New season. New routine. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`,
+      `Stay ready so you don't have to get ready. 💛\n\n{product_line}healthneeds.com.mt\n\n{hashtags}`,
+      `Every season. Every need. Health Needs. ❤️\n\n{product_line}Link in bio.\n\n{hashtags}`
+    ]
+  }
+};
+
+const HASHTAG_SETS = {
+  product: {
+    instagram: '#healthneeds #healthneedsmt #malta #gozo #maltagozo #maltadelivery #maltagozodelivery #health #wellness #supplements',
+    facebook: '#healthneeds #malta #health #wellness #supplements #maltadelivery',
+    tiktok: '#healthneeds #malta #health #wellness #fyp #foryou #supplements #maltafyp'
+  },
+  lifestyle: {
+    instagram: '#healthneeds #healthneedsmt #malta #wellness #selfcare #healthylifestyle #maltagozodelivery #wellbeing',
+    facebook: '#healthneeds #malta #wellness #selfcare #healthylifestyle',
+    tiktok: '#healthneeds #malta #wellness #selfcare #fyp #foryou #healthylifestyle'
+  },
+  educational: {
+    instagram: '#healthneeds #healthneedsmt #malta #healthtips #wellness #health #didyouknow #maltagozodelivery',
+    facebook: '#healthneeds #malta #healthtips #wellness #health',
+    tiktok: '#healthneeds #malta #healthtips #learnontiktok #fyp #foryou #wellness'
+  },
+  promo: {
+    instagram: '#healthneeds #healthneedsmt #malta #gozo #maltagozodelivery #sale #health #wellness #supplements',
+    facebook: '#healthneeds #malta #sale #health #wellness #freedelivery',
+    tiktok: '#healthneeds #malta #sale #health #fyp #foryou #wellness'
+  },
+  behindthescenes: {
+    instagram: '#healthneeds #healthneedsmt #malta #behindthescenes #bts #warehouse #maltagozodelivery #health',
+    facebook: '#healthneeds #malta #behindthescenes #health #wellness',
+    tiktok: '#healthneeds #malta #bts #behindthescenes #fyp #foryou #viral #warehouse'
+  },
+  ugc: {
+    instagram: '#healthneeds #healthneedsmt #malta #customerreview #testimonial #health #wellness #maltagozodelivery',
+    facebook: '#healthneeds #malta #customerreview #health #wellness',
+    tiktok: '#healthneeds #malta #review #fyp #foryou #health #wellness'
+  },
+  seasonal: {
+    instagram: '#healthneeds #healthneedsmt #malta #gozo #seasonal #health #wellness #maltagozodelivery',
+    facebook: '#healthneeds #malta #seasonal #health #wellness',
+    tiktok: '#healthneeds #malta #seasonal #fyp #foryou #health #wellness'
+  }
+};
+
+function buildProductLine(product) {
+  if (!product) return '';
+  return `👉 ${product}\n\n`;
+}
+
+function buildHook(topic, postType) {
+  const hooks = {
+    product: [`Introducing: ${topic}. ❤️`, `Meet your new favourite: ${topic}.`, `${topic} — and it's even better than it sounds. ❤️`],
+    lifestyle: [`Real talk about ${topic}.`, `Let's talk about ${topic} for a second.`, `${topic}. We need to talk about it. ❤️`],
+    educational: [`Everything you need to know about ${topic}. 👇`, `Quick question: do you know enough about ${topic}?`, `${topic} 101. Let's go. 👇`],
+    promo: [`Great news about ${topic}. 👇`, `This one's for the ${topic} fans. ❤️`, `${topic} — now even easier to get. 👇`],
+    behindthescenes: [`Ever wondered how your ${topic} gets to your door?`, `Behind the scenes of your ${topic} order. 📦`, `Day in the life: ${topic} edition. 📦`],
+    ugc: [`Our customers are talking about ${topic}. ❤️`, `What people are saying about ${topic}. 👇`, `Real feedback on ${topic}. And we love it. ❤️`],
+    seasonal: [`This season, ${topic} just got more important.`, `Seasonal reminder: don't forget about ${topic}. ❤️`, `${topic} season is here. Are you ready?`]
+  };
+  const arr = hooks[postType] || hooks.product;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function generateCaptions() {
+  const topic = document.getElementById('topic').value.trim();
+  const product = document.getElementById('product').value.trim();
+  const postType = document.getElementById('postType').value;
+  const extra = document.getElementById('extra').value.trim();
+
+  if (!topic) { alert('Please tell us what the post is about!'); return; }
+
+  const templates = TEMPLATES[postType]?.[selectedTone] || TEMPLATES.product.warm;
+  const hashtags = HASHTAG_SETS[postType]?.[selectedPlatform] || HASHTAG_SETS.product.instagram;
+  const productLine = buildProductLine(product);
+  const hook = buildHook(topic, postType);
+  const topicInfo = `${topic} is one of those things that can make a real difference to how you feel day to day — but most people don't give it the attention it deserves.`;
+  const topicFact = `most people underestimate the impact ${topic} can have on their daily energy and wellbeing.`;
+  const seasonHook = `The season is changing and your body is feeling it.`;
+
+  const panel = document.getElementById('resultsPanel');
+  panel.innerHTML = '';
+
+  const labels = ['Option 1', 'Option 2', 'Option 3'];
+
+  templates.forEach((template, i) => {
+    let caption = template
+      .replace(/{topic}/g, topic)
+      .replace(/{product_line}/g, productLine)
+      .replace(/{hashtags}/g, hashtags)
+      .replace(/{hook}/g, hook)
+      .replace(/{topic_info}/g, topicInfo)
+      .replace(/{topic_fact}/g, topicFact)
+      .replace(/{season_hook}/g, seasonHook);
+
+    if (extra) caption += `\n\n${extra}`;
+
+    const card = document.createElement('div');
+    card.className = 'caption-card';
+    card.innerHTML = `
+      <div class="caption-label">${labels[i]}</div>
+      <div class="caption-text">${caption}</div>
+      <div class="caption-actions">
+        <button class="btn-copy" onclick="copyCaption(this, \`${caption.replace(/`/g, '\\`')}\`)">
+          📋 Copy caption
+        </button>
+      </div>
+    `;
+    panel.appendChild(card);
+    setTimeout(() => card.classList.add('visible'), 80 + i * 120);
+  });
+}
+
+function copyCaption(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✅ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 Copy caption';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
