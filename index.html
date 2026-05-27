@@ -211,41 +211,89 @@ document.querySelectorAll('.who-btn').forEach(btn => {
   });
 });
 
-// Keyword matching from free text
+// Keyword matching from free text — phrase-first: longer specific phrases take priority over single words
 function parseGoalsFromText(text) {
   const t = text.toLowerCase();
-  const goals = [];
-  if (/sleep|insomnia|wake|tired at night|can't sleep|slaap/.test(t)) goals.push('sleep');
-  if (/energy|tired|fatigue|exhausted|low energy|vermoeid/.test(t)) goals.push('energy');
-  if (/stress|anxiet|nervous|overwhelm|burnout|worried/.test(t)) goals.push('stress');
-  if (/immune|sick|cold|flu|virus|infection|illness/.test(t)) goals.push('immune');
-  if (/gut|digest|bloat|stomach|bowel|ibs|constipat|diarrhea/.test(t)) goals.push('gut');
-  if (/skin|acne|glow|moistur|dry skin|rash|complexion/.test(t)) goals.push('skin');
-  if (/hair|nail|thinning|breakage|bald/.test(t)) goals.push('hair');
-  if (/weight|slim|fat|diet|calories|lose weight/.test(t)) goals.push('weight');
-  if (/joint|muscle|pain|cramp|stiff|arthritis|ache/.test(t)) goals.push('joint');
-  if (/heart|blood pressure|cardiovascular|cholesterol/.test(t)) goals.push('heart');
-  if (/kid|child|baby|toddler|infant/.test(t)) goals.push('kids');
-  if (/pregnan|expecting|trimester|maternity/.test(t)) goals.push('pregnancy');
-  if (/eye|vision|sight|lutein|macular|dry eye/.test(t)) goals.push('eye');
-  return goals;
+  const goals = new Set();
+
+  // --- TIER 1: PHRASES (specific, highest priority) ---
+  // Sunburn — must come before stress so "burned" goes to skin, not stress
+  if (/\bburn(ed|t)?\b(?! out| through| down| up| off)|sunburn|after.?sun|sun damage|too much sun|skin is red|red from sun|spf|sunscreen|sun protection|sun lotion|sun cream/.test(t)) goals.add('sunburn');
+  // Burned OUT specifically → stress
+  if (/burn(ed|t)? out|burning out|burnout/.test(t)) goals.add('stress');
+
+  // Sleep
+  if (/can.t sleep|trouble sleeping|hard to sleep|wake up at night|poor sleep|not sleeping|sleep issues|sleep problems|fall asleep|staying asleep/.test(t)) goals.add('sleep');
+  // Energy (phrases)
+  if (/no energy|low energy|always tired|constantly tired|feel drained|feel exhausted|run down|worn out|always fatigued|chronic fatigue/.test(t)) goals.add('energy');
+  // Stress (phrases)
+  if (/stressed out|feeling stressed|under stress|too much stress|panic attack|feel anxious|constant worry|overwhelmed|can.t cope|mental fatigue|mental exhaustion/.test(t)) goals.add('stress');
+  // Immune (phrases)
+  if (/keep getting sick|getting ill|frequent colds|cold and flu|boost.*immune|weak immune|always catching|sick all the time/.test(t)) goals.add('immune');
+  // Gut (phrases)
+  if (/feel bloated|stomach pain|stomach ache|tummy ache|bad digestion|digestive issues|irregular bowel|loose stools|gut health|leaky gut/.test(t)) goals.add('gut');
+  // Skin (phrases)
+  if (/dry skin|oily skin|skin breakout|skin problems|dull skin|anti.aging|aging skin|skin glow|glowing skin|clear skin|skin hydration/.test(t)) goals.add('skin');
+  // Hair (phrases)
+  if (/hair loss|hair falling|losing hair|thinning hair|hair breakage|brittle hair|weak hair|hair growth|hair and nails/.test(t)) goals.add('hair');
+  // Joint (phrases)
+  if (/joint pain|joints hurt|achy joints|stiff joints|knee pain|back pain|muscle pain|sore muscles|muscle aches/.test(t)) goals.add('joint');
+  // Heart (phrases)
+  if (/heart health|high cholesterol|blood pressure|lower cholesterol|cardiovascular health/.test(t)) goals.add('heart');
+  // Weight (phrases)
+  if (/lose weight|weight loss|trying to slim|lose fat|weight management|shed pounds|body fat/.test(t)) goals.add('weight');
+  // Kids (phrases)
+  if (/for my child|for my kid|for my baby|for my toddler|children.s vitamin|kids vitamin|my son|my daughter|my infant|newborn/.test(t)) goals.add('kids');
+  // Pregnancy (phrases)
+  if (/trying to conceive|trying for a baby|prenatal vitamin|during pregnancy|early pregnancy/.test(t)) goals.add('pregnancy');
+  // Eye (phrases)
+  if (/eye health|dry eyes|blurry vision|eye strain|screen time.*eye|macular health/.test(t)) goals.add('eye');
+
+  // --- TIER 2: SINGLE KEYWORDS (fallback — only if goal not yet detected) ---
+  if (!goals.has('sleep') && !goals.has('energy') && /\bsleep\b|insomnia/.test(t)) goals.add('sleep');
+  if (!goals.has('energy') && /\benergy\b|\btired\b|\bfatigue\b|exhaust|sluggish|drained/.test(t)) goals.add('energy');
+  if (!goals.has('stress') && /\bstress\b|anxiet|nervous|worried/.test(t)) goals.add('stress');
+  if (!goals.has('immune') && /\bimmune\b|\bsick\b|\bcold\b|\bflu\b|infection/.test(t)) goals.add('immune');
+  if (!goals.has('gut') && /\bgut\b|digest|bloat|\bstomach\b|bowel|\bibs\b|constipat|diarr/.test(t)) goals.add('gut');
+  if (!goals.has('sunburn') && !goals.has('skin') && /\bskin\b|acne|moistur|complexion|rash/.test(t)) goals.add('skin');
+  if (!goals.has('hair') && /\bhair\b|\bnail\b|thinning|breakage|\bbald/.test(t)) goals.add('hair');
+  if (!goals.has('weight') && /\bweight\b|\bslim\b|\bdiet\b|calori/.test(t)) goals.add('weight');
+  if (!goals.has('joint') && /\bjoint\b|muscle|\bpain\b|cramp|stiff|arthritis/.test(t)) goals.add('joint');
+  if (!goals.has('heart') && /\bheart\b|cholesterol/.test(t)) goals.add('heart');
+  if (!goals.has('kids') && /\bkid\b|\bchild\b|\bbaby\b|toddler|infant/.test(t)) goals.add('kids');
+  if (!goals.has('pregnancy') && /pregnan|expecting|maternity/.test(t)) goals.add('pregnancy');
+  if (!goals.has('eye') && /\beye\b|vision|lutein/.test(t)) goals.add('eye');
+
+  // sunburn implies skin too
+  if (goals.has('sunburn')) goals.add('skin');
+
+  return [...goals];
 }
 
 // Detect conditions from text for warnings
 function parseConditions(text) {
   const t = text.toLowerCase();
   const conditions = [];
-  if (/pregnan|expecting|trimester/.test(t)) conditions.push('pregnant');
-  if (/blood thinn|warfarin|anticoagul|aspirin daily/.test(t)) conditions.push('bloodthinners');
-  if (/kidney|renal/.test(t)) conditions.push('kidney');
-  if (/diabetes|diabetic|insulin|blood sugar/.test(t)) conditions.push('diabetes');
-  if (/thyroid/.test(t)) conditions.push('thyroid');
-  if (/breastfeed|nursing|lactating/.test(t)) conditions.push('breastfeeding');
+  if (/pregnan|expecting|trimester|zwanger/.test(t)) conditions.push('pregnant');
+  if (/blood thinn|warfarin|anticoagul|aspirin daily|bloedverdunner/.test(t)) conditions.push('bloodthinners');
+  if (/kidney|renal|nier/.test(t)) conditions.push('kidney');
+  if (/diabet|insulin|blood sugar|bloedsuiker/.test(t)) conditions.push('diabetes');
+  if (/thyroid|schildklier/.test(t)) conditions.push('thyroid');
+  if (/breastfeed|nursing|lactating|borstvoeding/.test(t)) conditions.push('breastfeeding');
   if (/allerg|intoleran|celiac|gluten/.test(t)) conditions.push('allergy');
   return conditions;
 }
 
 const PRODUCTS = [
+  {name:'Avène Sun Very High Protection Cream SPF50+ 50ml',category:'Sun Protection',goals:["skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Bioderma Photoderm Aquafluide SPF50+ Light 40ml',category:'Sun Protection',goals:["skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Eucerin Sun Aftersun Creme Gel 200Ml',category:'After Sun',goals:["skin", "sunburn"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'La Roche-Posay Posthelios After Sun Gel 200Ml',category:'After Sun',goals:["skin", "sunburn"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Nivea After Sun Spray 200Ml',category:'After Sun',goals:["skin", "sunburn"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'La Roche-Posay Anthelios Post-UV Exposure After-Sun Lotion 200Ml',category:'After Sun',goals:["skin", "sunburn"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Bioderma Photoderm After-Sun Gel-Cream 200ml',category:'After Sun',goals:["skin", "sunburn"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Avène After-Sun Restorative Lotion 200ml',category:'After Sun',goals:["skin", "sunburn"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Eucerin Sun Protection Kids Spray Spf50+200Ml',category:'Sun Protection',goals:["skin", "kids"],who:["baby"],warnings:{}},
   {name:'Quest Liposomal Vitamin C 500mg',category:'Vitamin C',goals:["immune", "gut", "stress"],who:["adult", "woman", "man"],warnings:{}},
   {name:'Natures Aid Vitamin C 1000Mg Tablets X240',category:'Vitamin C',goals:["immune", "joint", "hair", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
   {name:'Quest Vitamin C 1000Mg Timed Released X120 Tablets',category:'Vitamin C',goals:["immune", "stress"],who:["adult", "woman", "man"],warnings:{}},
@@ -695,6 +743,10 @@ function getWhy(product, goal) {
       if (is('lutein|zeaxanthin')) return 'Lutein and zeaxanthin are the most important antioxidants for macular health — they filter harmful blue light and protect eyes from age-related damage.';
       if (isOmega) return 'Omega-3 fatty acids are linked to reduced dry eye symptoms and support healthy visual function.';
       return pName + ' supports healthy vision and long-term eye health.';
+    case 'sunburn':
+      if (is('after sun|aftersun|post-uv|posthelios|after-sun')) return 'Specifically formulated to soothe and repair sun-exposed skin — cools redness, restores lost moisture, and helps skin recover after sun exposure.';
+      if (is('spf|sunscreen|sun protection|sun cream|sun lotion')) return 'Broad-spectrum sun protection that shields skin from UVA and UVB damage — essential daily protection, especially in Malta\'s intense sun.';
+      return pName + ' soothes and repairs sunburned or sun-stressed skin.';
     default:
       return pName + ' is a quality health supplement from our Health Needs range.';
   }
