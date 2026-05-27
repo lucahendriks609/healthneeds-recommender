@@ -227,6 +227,7 @@ function parseGoalsFromText(text) {
   if (/heart|blood pressure|cardiovascular|cholesterol/.test(t)) goals.push('heart');
   if (/kid|child|baby|toddler|infant/.test(t)) goals.push('kids');
   if (/pregnan|expecting|trimester|maternity/.test(t)) goals.push('pregnancy');
+  if (/eye|vision|sight|lutein|macular|dry eye/.test(t)) goals.push('eye');
   return goals;
 }
 
@@ -245,302 +246,460 @@ function parseConditions(text) {
 }
 
 const PRODUCTS = [
-  {
-    name: "Magnetrex Magnesium Bisglycinate X30 Tablets",
-    category: "Vitamins & Minerals",
-    goals: ["sleep", "stress", "joint", "energy"],
-    who: ["adult", "woman", "man"],
-    warnings: {
-      kidney: "⚠️ If you have kidney disease, consult your doctor before taking magnesium supplements — they can affect kidney function.",
-      default: null
-    },
-    why: {
-      sleep: "Magnesium is one of the most effective natural sleep supporters — it calms the nervous system and helps your body wind down properly at night.",
-      stress: "Magnesium plays a key role in regulating your stress response. Many people are deficient without knowing it, which makes anxiety and tension worse.",
-      joint: "This highly absorbable form of magnesium helps reduce muscle cramps and supports joint comfort, especially after exercise.",
-      energy: "Low magnesium is one of the most common reasons for unexplained fatigue. This formula is easily absorbed and gentle on the stomach.",
-      default: "Magnesium Bisglycinate is one of our most popular supplements — gentle, highly absorbable, and supports everything from sleep to muscle recovery."
-    }
-  },
-  {
-    name: "Igennus Triple Magnesium Complex X60 Tablets",
-    category: "Vitamins & Minerals",
-    goals: ["sleep", "stress", "joint", "energy"],
-    who: ["adult", "woman", "man"],
-    warnings: {
-      kidney: "⚠️ If you have kidney disease, consult your doctor before taking magnesium supplements.",
-      default: null
-    },
-    why: {
-      sleep: "This triple magnesium formula combines three different forms for maximum absorption — ideal if you've tried magnesium before without much effect.",
-      stress: "The combination of three magnesium types makes this especially effective for nervous system support and stress resilience.",
-      joint: "Supports muscle relaxation and joint comfort with a more complete magnesium profile than single-form supplements.",
-      energy: "Triple magnesium means better absorption across the board, making it more effective at fighting fatigue than standard magnesium.",
-      default: "A premium triple magnesium formula that covers sleep, stress, and muscle recovery all in one."
-    }
-  },
-  {
-    name: "Melatonin + Forte 5 + Valerian X60 Tablets",
-    category: "Health & Lifestyle",
-    goals: ["sleep", "stress"],
-    who: ["adult", "woman", "man"],
-    warnings: {
-      pregnant: "⚠️ Not recommended during pregnancy. The safety of melatonin in pregnancy has not been established — please speak with your doctor.",
-      breastfeeding: "⚠️ Not recommended while breastfeeding. Please consult your doctor before use.",
-      default: null
-    },
-    why: {
-      sleep: "Melatonin combined with valerian is one of the most effective natural combinations for falling asleep faster and sleeping more deeply.",
-      stress: "Valerian has a naturally calming effect on the nervous system, making this a great option if stress is what's keeping you up at night.",
-      default: "A powerful natural sleep formula combining melatonin and valerian root for faster sleep onset and better sleep quality."
-    }
-  },
-  {
-    name: "Quest Forte D 4000 X120 Tablets",
-    category: "Vitamins",
-    goals: ["immune", "energy", "heart"],
-    who: ["adult", "woman", "man"],
-    warnings: {
-      kidney: "⚠️ High-dose vitamin D should be used with caution if you have kidney disease. Please check with your doctor.",
-      default: null
-    },
-    why: {
-      immune: "Vitamin D3 is one of the most important nutrients for a strong immune system, especially during the months when sun exposure drops.",
-      energy: "Low vitamin D is directly linked to fatigue and low mood. A high-strength dose like this can make a noticeable difference within a few weeks.",
-      heart: "Vitamin D plays an important role in cardiovascular health and is often overlooked as a heart health supplement.",
-      default: "High-strength Vitamin D3 for immune support, energy, and overall wellbeing — one of the most important supplements you can take."
-    }
-  },
-  {
-    name: "BetterYou Vitamin D3 + K2 12ml",
-    category: "Vitamins",
-    goals: ["immune", "energy", "heart", "joint"],
-    who: ["adult", "woman", "man"],
-    warnings: {
-      bloodthinners: "⚠️ Vitamin K2 may interact with blood-thinning medications like warfarin. Please consult your doctor or pharmacist before use.",
-      default: null
-    },
-    why: {
-      immune: "D3 and K2 together are more effective than D3 alone — K2 helps direct calcium to the right places and supports immune function.",
-      energy: "This spray format is absorbed faster than tablets, making it ideal if you want to feel the effects of vitamin D more quickly.",
-      heart: "The D3 + K2 combination is specifically recommended for cardiovascular health — K2 helps keep arteries healthy.",
-      joint: "K2 helps calcium reach your bones and joints rather than soft tissue, making this a smart choice for joint and bone support.",
-      default: "D3 and K2 in one easy spray — better absorbed than tablets and great for immune support, energy, and bone health."
-    }
-  },
-  {
-    name: "Optibac Everyday Extra Strength X90",
-    category: "Supplements – Probiotics",
-    goals: ["gut", "immune", "energy"],
-    who: ["adult", "woman", "man"],
-    warnings: { default: null },
-    why: {
-      gut: "Optibac is one of the most researched probiotic brands available. This extra strength formula is ideal for restoring and maintaining a healthy gut microbiome.",
-      immune: "Around 70% of your immune system lives in your gut. A strong probiotic like this supports your immunity from the inside out.",
-      energy: "A healthy gut absorbs nutrients more efficiently, which means better energy levels throughout the day.",
-      default: "A premium, well-researched probiotic for gut health, immunity, and overall digestive comfort."
-    }
-  },
-  {
-    name: "Via Lattea X20 Tablets",
-    category: "Health & Lifestyle",
-    goals: ["gut"],
-    who: ["adult", "woman", "man"],
-    warnings: { default: null },
-    why: {
-      gut: "Via Lattea supports digestive comfort and is particularly helpful for bloating, irregularity, and general gut discomfort.",
-      default: "A gentle and effective digestive supplement for everyday gut comfort and regularity."
-    }
-  },
-  {
-    name: "Vital Proteins Collagen Peptides 567g",
-    category: "Supplements – Collagen",
-    goals: ["skin", "hair", "joint"],
-    who: ["adult", "woman", "man"],
-    warnings: {
-      allergy: "⚠️ Contains bovine collagen. Not suitable if you have a beef or bovine allergy.",
-      default: null
-    },
-    why: {
-      skin: "Collagen peptides are clinically shown to improve skin elasticity and hydration — one of the most effective supplements for a natural glow.",
-      hair: "Collagen provides the building blocks for stronger, thicker hair. Many people notice less breakage within 4–6 weeks of daily use.",
-      joint: "Collagen is a key structural protein in your joints. Regular supplementation helps maintain cartilage and reduce joint discomfort.",
-      default: "Vital Proteins is one of the most trusted collagen brands worldwide — great for skin, hair, nails, and joints all at once."
-    }
-  },
-  {
-    name: "Pantogar Hair & Nails X90 Capsules",
-    category: "Supplements",
-    goals: ["hair"],
-    who: ["adult", "woman", "man"],
-    warnings: {
-      pregnant: "⚠️ Not recommended during pregnancy. Please consult your doctor before use.",
-      default: null
-    },
-    why: {
-      hair: "Pantogar is a clinically formulated supplement specifically designed for hair and nail health — one of our bestsellers for a reason.",
-      default: "A targeted hair and nail supplement with a strong clinical track record. Results are typically visible after 3 months of consistent use."
-    }
-  },
-  {
-    name: "CeraVe Moisturising Cream",
-    category: "Skincare",
-    goals: ["skin"],
-    who: ["adult", "woman", "man", "baby"],
-    warnings: { default: null },
-    why: {
-      skin: "CeraVe is dermatologist-developed and packed with ceramides and hyaluronic acid — one of the best everyday moisturisers for healthy, glowing skin.",
-      default: "A dermatologist-recommended moisturiser that strengthens the skin barrier and keeps skin soft and hydrated all day."
-    }
-  },
-  {
-    name: "Active Iron For Women X60 Capsules",
-    category: "Minerals – Iron",
-    goals: ["energy", "hair"],
-    who: ["woman"],
-    warnings: {
-      default: "⚠️ Do not take iron supplements unless you have confirmed low iron levels. Excess iron can be harmful — check with your doctor if unsure."
-    },
-    why: {
-      energy: "Iron deficiency is one of the most common causes of fatigue in women. This gentle, non-constipating formula is specifically designed for women's needs.",
-      hair: "Low iron levels are a leading cause of hair thinning in women. This formula is absorbed twice as well as standard iron supplements.",
-      default: "A gentle iron supplement made specifically for women — great for energy and hair health without the side effects of regular iron."
-    }
-  },
-  {
-    name: "Vitabiotics Osteocare Original 90 Tablets",
-    category: "Vitamins & Minerals",
-    goals: ["joint", "heart"],
-    who: ["adult", "woman", "man"],
-    warnings: {
-      kidney: "⚠️ High calcium intake should be avoided in kidney disease. Please consult your doctor before taking this supplement.",
-      default: null
-    },
-    why: {
-      joint: "Osteocare combines calcium, magnesium, and vitamin D in one formula — everything your bones and joints need to stay strong.",
-      heart: "This comprehensive formula supports bone density and cardiovascular health with a well-balanced blend of key minerals.",
-      default: "A complete bone and joint support formula with calcium, magnesium, and vitamin D3 — one of our most trusted bestsellers."
-    }
-  },
-  {
-    name: "Health Aid Ashwagandha 600mg X60 Tablets",
-    category: "Supplements",
-    goals: ["stress", "energy", "sleep"],
-    who: ["adult", "woman", "man"],
-    warnings: {
-      pregnant: "⚠️ Not recommended during pregnancy — ashwagandha may stimulate uterine contractions. Please avoid during pregnancy.",
-      breastfeeding: "⚠️ Not recommended while breastfeeding. Please consult your doctor before use.",
-      thyroid: "⚠️ Ashwagandha may affect thyroid hormone levels. If you have a thyroid condition or take thyroid medication, please check with your doctor first.",
-      default: null
-    },
-    why: {
-      stress: "Ashwagandha is one of the most well-researched adaptogens for stress relief — it helps lower cortisol and makes you feel more balanced throughout the day.",
-      energy: "By reducing the physical impact of stress on your body, ashwagandha naturally improves energy and mental clarity.",
-      sleep: "Ashwagandha helps regulate cortisol levels, which makes it easier to wind down and get deeper sleep at night.",
-      default: "A high-strength ashwagandha supplement for stress, energy, and overall resilience — perfect for busy, demanding lifestyles."
-    }
-  },
-  {
-    name: "Seven Seas Omega-3 Fish Oil",
-    category: "Supplements – Omega",
-    goals: ["heart", "joint", "energy"],
-    who: ["adult", "woman", "man"],
-    warnings: {
-      bloodthinners: "⚠️ High-dose fish oil can have a mild blood-thinning effect. If you take anticoagulant medication, please check with your doctor before use.",
-      allergy: "⚠️ Contains fish. Not suitable if you have a fish or shellfish allergy.",
-      default: null
-    },
-    why: {
-      heart: "Omega-3 fatty acids are one of the most evidence-backed supplements for heart health — they support healthy cholesterol and blood pressure levels.",
-      joint: "Omega-3s have strong anti-inflammatory properties, which makes them very effective for reducing joint stiffness and discomfort.",
-      energy: "Omega-3s support brain function and reduce inflammation, which contributes to better mental clarity and sustained energy.",
-      default: "A trusted omega-3 fish oil supplement for heart health, joint comfort, and brain function."
-    }
-  },
-  {
-    name: "Chewy Vites Kids Multi Vitamin + Probiotic X60",
-    category: "Mother & Baby",
-    goals: ["kids", "immune", "energy", "gut"],
-    who: ["baby"],
-    warnings: { default: null },
-    why: {
-      kids: "A complete multivitamin and probiotic in one tasty gummy — everything growing kids need for immune support, energy, and a healthy gut.",
-      immune: "Packed with vitamins C, D, and zinc alongside probiotics — a great all-in-one for keeping kids healthy year-round.",
-      energy: "Essential vitamins and minerals in a format kids actually enjoy taking — supports energy, focus, and healthy development.",
-      gut: "The added probiotic supports a healthy gut microbiome in children, which is key for both digestion and immune health.",
-      default: "A delicious multivitamin + probiotic gummy that covers all the basics for children's health and wellbeing."
-    }
-  },
-  {
-    name: "BioGaia Baby Drops 5ml",
-    category: "Mother & Baby",
-    goals: ["kids", "gut"],
-    who: ["baby"],
-    warnings: { default: null },
-    why: {
-      kids: "BioGaia is one of the most researched probiotics for babies — clinically shown to reduce colic, improve digestion, and support immune health.",
-      gut: "A well-studied probiotic strain specifically for babies and young children, helping establish a healthy gut microbiome from early on.",
-      default: "A clinically proven probiotic drop for babies that supports gut health and reduces colic symptoms."
-    }
-  },
-  {
-    name: "Gestarelle G X30 Tablets",
-    category: "Mother & Baby – Pregnancy",
-    goals: ["pregnancy", "energy"],
-    who: ["woman"],
-    warnings: { default: null },
-    why: {
-      pregnancy: "Gestarelle G is specifically formulated for pregnancy, providing the key nutrients mother and baby need during this important time.",
-      energy: "Specially designed for pregnancy-related fatigue, with iron, folic acid, and B vitamins to support energy during all trimesters.",
-      default: "A trusted pregnancy supplement with essential vitamins and minerals for both mother and baby."
-    }
-  },
-  {
-    name: "Nupo One Meal + Prime",
-    category: "Health & Lifestyle",
-    goals: ["weight", "energy"],
-    who: ["adult", "woman", "man"],
-    warnings: {
-      pregnant: "⚠️ Meal replacements are not recommended during pregnancy. Please consult your doctor or midwife for nutritional guidance.",
-      default: null
-    },
-    why: {
-      weight: "Nupo One Meal replaces a full meal with controlled calories and complete nutrition — a practical and sustainable approach to weight management.",
-      energy: "A nutritionally complete meal replacement that keeps energy levels stable throughout the day without the crash of regular snacks.",
-      default: "A nutritionally complete meal replacement for weight management and sustained daily energy."
-    }
-  },
-  {
-    name: "ORS Hydration Soluble Tablets",
-    category: "Health & Lifestyle",
-    goals: ["energy", "heart"],
-    who: ["adult", "woman", "man", "baby"],
-    warnings: {
-      kidney: "⚠️ If you have kidney disease, consult your doctor before using electrolyte supplements — sodium and potassium levels need careful management.",
-      default: null
-    },
-    why: {
-      energy: "Proper hydration with electrolytes makes a big difference to energy levels — especially useful if you're active or spend time in the Maltese heat.",
-      heart: "Electrolyte balance is important for cardiovascular function. ORS tablets help maintain healthy fluid balance efficiently.",
-      default: "A fast and effective way to rehydrate and restore electrolytes — great for active lifestyles or hot weather."
-    }
-  },
-  {
-    name: "German Zinc Effervescent Peach Passionfruit X20 Tablets",
-    category: "Vitamins & Minerals",
-    goals: ["immune", "skin", "hair"],
-    who: ["adult", "woman", "man"],
-    warnings: {
-      default: "⚠️ Do not exceed the recommended daily dose of zinc. Long-term high-dose zinc supplementation can interfere with copper absorption."
-    },
-    why: {
-      immune: "Zinc is essential for a strong immune system and one of the first things to take at the first sign of illness.",
-      skin: "Zinc plays an important role in skin repair and can be particularly helpful for blemish-prone skin.",
-      hair: "Zinc deficiency is a common but overlooked cause of hair thinning — this tasty effervescent makes it easy to get your daily dose.",
-      default: "A great-tasting zinc supplement that supports immune health, skin clarity, and hair strength."
-    }
-  }
+  {name:'Quest Liposomal Vitamin C 500mg',category:'Vitamin C',goals:["immune", "gut", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Vitamin C 1000Mg Tablets X240',category:'Vitamin C',goals:["immune", "joint", "hair", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Vitamin C 1000Mg Timed Released X120 Tablets',category:'Vitamin C',goals:["immune", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Optibac Babies And Children X90 Sachets',category:'Vitamins and health',goals:["pregnancy", "kids", "weight", "gut"],who:["baby"],warnings:{}},
+  {name:'Optibac Babies And Children X30 Sachets',category:'Vitamins and health',goals:["pregnancy", "kids", "weight", "gut"],who:["baby"],warnings:{}},
+  {name:'Optibac For Your Baby Drops X 30 Servings',category:'Vitamins and health',goals:["kids", "weight", "gut"],who:["baby"],warnings:{}},
+  {name:'Optibac For Women X90',category:'Probiotics',goals:["weight", "gut"],who:["woman"],warnings:{}},
+  {name:'Optibac For Women X30',category:'Probiotics',goals:["weight", "gut"],who:["woman"],warnings:{}},
+  {name:'Quest Cranbiotix Capsules X 30',category:'Probiotics',goals:["immune", "gut"],who:["woman"],warnings:{}},
+  {name:'ActiKid Multi-Vitamin Drops Orange Flavour 25ML',category:'Vitamin D',goals:["immune", "joint", "kids", "energy", "skin", "pregnancy"],who:["baby"],warnings:{}},
+  {name:'BetterYou Vitamin D 400IU Infant 15Ml',category:'Vitamins and health',goals:["immune", "joint", "kids"],who:["baby"],warnings:{}},
+  {name:'Erba Vita Vitamin D Gummies X30',category:'Vitamin D',goals:["immune", "joint", "kids"],who:["baby"],warnings:{}},
+  {name:'Natures Aid Mini Vitamin D3 Drops 50ml',category:'Vitamins and health',goals:["immune", "joint", "kids"],who:["baby"],warnings:{}},
+  {name:'Chewy Vites Kids Calcium & Vitamin D3 X60',category:'Calcium',goals:["immune", "energy", "joint", "kids"],who:["baby"],warnings:{}},
+  {name:'Chewy Vites Vitamin D3 Kids X60',category:'Calcium',goals:["immune", "joint", "kids", "eye", "energy"],who:["baby"],warnings:{}},
+  {name:'Optibac Women\'s Wellbeing X30',category:'Multivitamin',goals:["immune", "stress", "weight", "hair", "gut", "energy", "skin"],who:["woman"],warnings:{}},
+  {name:'Vitabiotics Wellman Prostace 60 Tablets',category:'Multivitamin',goals:["immune", "weight", "eye", "hair", "gut", "energy", "skin", "heart"],who:["man"],warnings:{}},
+  {name:'Centrum Advance X 100 Tablets',category:'Multivitamin',goals:["immune", "eye", "hair", "energy", "skin", "pregnancy", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Centrum Women Multivitamin 60 Tablets',category:'Multivitamin',goals:["immune", "joint", "hair", "energy", "skin"],who:["woman"],warnings:{}},
+  {name:'Vitabiotics Wellwoman 70+ Multivitamin 30 Tablets',category:'Multivitamin',goals:["immune", "joint", "weight", "eye", "gut", "energy", "skin"],who:["woman"],warnings:{}},
+  {name:'Vitabiotics Wellwoman Original Multivitamin 30 Capsules',category:'Multivitamin',goals:["immune", "energy", "joint", "skin"],who:["woman"],warnings:{}},
+  {name:'Quest Liposomal Glutathione 500mg 30caps',category:'Iron',goals:["hair", "energy", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Health Aid Iron Bisglycinate X90 Tablets',category:'Iron',goals:["immune", "energy", "hair", "gut"],who:["adult", "woman", "man"],warnings:{default:'⚠️ Do not take iron supplements without confirmed low iron levels. Check with your doctor if unsure.'}},
+  {name:'BetterYou Iron 10mg 25Ml',category:'Iron',goals:["hair", "energy", "gut"],who:["adult", "woman", "man"],warnings:{default:'⚠️ Do not take iron supplements without confirmed low iron levels. Check with your doctor if unsure.'}},
+  {name:'Natures Aid Iron Mini Drops 400Iu 50ml',category:'Vitamins and health',goals:["hair", "energy", "kids", "weight"],who:["baby"],warnings:{default:'⚠️ Do not take iron supplements without confirmed low iron levels. Check with your doctor if unsure.'}},
+  {name:'Chewy Vites Kids Multi-VIt + Iron X60',category:'Vitamins and health',goals:["immune", "kids", "hair", "gut", "energy"],who:["baby"],warnings:{default:'⚠️ Do not take iron supplements without confirmed low iron levels. Check with your doctor if unsure.'}},
+  {name:'GlobiFer Plus X 40 Tablets',category:'Iron',goals:["hair", "energy", "kids", "pregnancy"],who:["baby"],warnings:{}},
+  {name:'Pregnacare Plus Omega-3 Dual Pack 28 Day Supply',category:'Pregnancy supplements',goals:["immune", "joint", "kids", "energy", "skin", "pregnancy", "heart"],who:["woman"],warnings:{}},
+  {name:'Haliborange Omega-3 & Multivitamins 30 Orange Soft Gummies',category:'Vitamins and health',goals:["immune", "joint", "kids", "energy", "skin", "heart"],who:["baby"],warnings:{}},
+  {name:'Erba Vita Vitamin C Gummies X30',category:'Vitamin C',goals:["immune", "kids", "weight", "hair", "energy"],who:["baby"],warnings:{}},
+  {name:'Erba Vita Difese Kids Gummies X30',category:'Vitamin C',goals:["immune", "joint", "kids", "hair", "skin"],who:["baby"],warnings:{}},
+  {name:'Pro-Ven Kids Vitamins C,D & Elderberry Fruit Chewables x60 | Mixed Berry Flavour',category:'Vitamin C',goals:["immune", "joint", "kids", "weight"],who:["baby"],warnings:{}},
+  {name:'Pantogar for Hair & Nails X90 Capsules',category:'Vitamin B',goals:["hair", "energy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'BetterYou B12 Boost 25Ml',category:'Vitamin B',goals:["immune", "energy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'BetterYou B-Complete 25Ml',category:'Vitamin B',goals:["immune", "energy", "pregnancy"],who:["adult", "woman", "man"],warnings:{bloodthinners:'⚠️ May interact with blood-thinning medication. Please consult your doctor or pharmacist before use.'}},
+  {name:'Health Aid Siberian Ginseng 250Mg X30 Capsules',category:'Ginseng',goals:["energy", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Koregin 3000 30 Capsules',category:'Ginseng',goals:["energy", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Forte Pharma Immuvit 4G X30 Tablets',category:'Ginseng',goals:["immune", "joint", "stress", "hair", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Optibac Everyday Extra Strength X90',category:'Probiotics',goals:["immune", "weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Optibac Saccharomyces Boulardii X80',category:'Probiotics',goals:["weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Optibac One Week Flat X28 Sachets',category:'Probiotics',goals:["weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Agnus Castus 550Mg 60 Tablets',category:'Agnus cactus',goals:["stress"],who:["woman"],warnings:{}},
+  {name:'Health Aid Aloe Vera 5000Mg X60 Tablets',category:'Aloe vera',goals:["skin", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Aloe Vera 5000Mg 30 Tablets',category:'Aloe vera',goals:["skin", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Aloe Vera Gel 250Ml',category:'Aloe vera',goals:["skin", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vitabiotics Wellman Conception 30 Tablets',category:'Fertility',goals:["immune", "joint", "stress", "weight", "hair", "gut", "energy", "skin", "heart"],who:["adult", "man"],warnings:{}},
+  {name:'Fertilovit M Plus X90 Capsules',category:'Fertility',goals:["immune", "hair", "skin", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Fertilovit F Endo Capsules 2X45',category:'Fertility',goals:["hair", "energy", "pregnancy", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Forte Vitamin D3 2500iu & K2 100 μg 60caps',category:'Vitamin D',goals:["immune", "joint"],who:["adult", "woman", "man"],warnings:{bloodthinners:'⚠️ May interact with blood-thinning medication. Please consult your doctor or pharmacist before use.'}},
+  {name:'Igennus Vegan Vitamin D3 1000 X365 Tablets',category:'Vitamin D',goals:["immune", "joint"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Igennus Daily Vitamin D3 2000iu Cholecalcifero X365 Capsules',category:'Vitamin D',goals:["immune", "joint"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Vitamin B Complex 90 Tablets',category:'Vitamin B',goals:["immune", "stress", "hair", "energy", "skin", "pregnancy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Vitamin B Complex Supreme 90 Capsules',category:'Vitamin B',goals:["hair", "energy", "skin", "pregnancy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Zymerex Vitamin B Complex Gummies x60 | Strawberry, Blueberry & Mandarin Flavour',category:'Vitamin B',goals:["energy", "weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Vitamin A 5000 Iu 100 Capsules',category:'Vitamin A',goals:["immune", "joint", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Vitamin A And D Complex X60 Capsules',category:'Vitamin A',goals:["immune", "joint", "eye", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Ashwagandha 500Mg X60 Capsules',category:'Ashwagandha',goals:["energy", "sleep", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Proven For Menopause X60 Capsules',category:'Ashwagandha',goals:["immune", "stress", "weight", "gut", "energy"],who:["man"],warnings:{}},
+  {name:'Pure Encapsulations Extra Energy X30 Capsules',category:'Ashwagandha',goals:["immune", "energy", "heart", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Bee Propolis 1000Mg *60 Tablets',category:'Bee Propolis',goals:["immune"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Beta Carotene 23,000I.U X 30 Capsules',category:'Beta Carotene',goals:["skin", "eye"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vitabiotics Perfectil Plus Skin Extra Support Dual Pack 28 Day Supply',category:'Biotin',goals:["immune", "joint", "hair", "energy", "skin", "pregnancy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vitabiotics Perfectil Plus Hair Extra Support 60 Tablets',category:'Biotin',goals:["immune", "joint", "hair", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vitabiotics Perfectil Plus Nails Extra Support 60 Tablets',category:'Biotin',goals:["immune", "joint", "hair", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Health Aid Brainvit Tablets X60',category:'Amino acids',goals:["heart", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Branched Chain Amino Acids X60 Tablets',category:'Amino acids',goals:["energy", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid L-5HTP 50Mg X60 Tablets',category:'Amino acids',goals:["weight", "sleep", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Seven Seas JointCare + Calcium 60 Capsules',category:'Calcium',goals:["immune", "joint", "hair", "skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Optibac Adult Strawberry Gummies X30',category:'Calcium',goals:["immune", "joint", "weight", "hair", "gut", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vitabiotics Menopace + Calcium Vitamin 60 Tablets',category:'Calcium',goals:["immune", "joint", "weight", "heart"],who:["woman", "man"],warnings:{}},
+  {name:'Health Aid Zinc Citrate 100Mg X100 Tablets',category:'Zinc',goals:["immune", "weight", "hair", "gut", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Synergistic Zinc 15Mg Copper X30 Tablets',category:'Zinc',goals:["immune", "hair", "skin", "stress"],who:["adult", "woman", "man"],warnings:{default:'⚠️ Do not exceed the recommended daily dose of zinc.'}},
+  {name:'Health Aid Zinc Gluconate 70Mg X90 Tablets',category:'Zinc',goals:["immune", "joint", "hair", "gut", "skin"],who:["adult", "woman", "man"],warnings:{default:'⚠️ Do not exceed the recommended daily dose of zinc.'}},
+  {name:'Quest Liverbiotix X30 Tablets',category:'Choline',goals:["gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Health Aid Livercare Prolonged Release x60 Tablets',category:'Choline',goals:["joint"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Choline Inositol X60 Capsules',category:'Choline',goals:["weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Fertilovit F PCOS X30 Servings',category:'Chromium',goals:["pregnancy", "weight", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Erba Vita Glicem Stop Complete X60 Capsules',category:'Chromium',goals:["weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Chromium Picolinate 1800Ug x60 Tablets',category:'Chromium',goals:["weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Health Aid Coq10 Co Enzyme 120Mg X30 Capsules',category:'Coenzyme Q10',goals:["energy", "heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Coenergy Coq10 30Mg X30 Capsules',category:'Coenzyme Q10',goals:["immune", "energy", "heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Co Enzyme Q10 30Mg X30 Tablets',category:'Coenzyme Q10',goals:["energy", "heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Coenzyme Q10 30Mg X30 Tablets',category:'Coenzyme Q10',goals:["energy", "heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Once a Day Q10 + Vitamins X20 Effervescent Tablets',category:'Coenzyme Q10',goals:["immune", "stress", "gut", "energy", "skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Forte Cran Sachets X15',category:'Cranberry',goals:["heart", "gut"],who:["woman"],warnings:{}},
+  {name:'Laborest Prostanox X30 Tablets',category:'Cranberry',goals:["immune", "joint", "heart", "gut"],who:["woman"],warnings:{}},
+  {name:'Bio Kult Pro-Cyan X45 Capsules',category:'Cranberry',goals:["skin", "gut"],who:["woman"],warnings:{}},
+  {name:'Erba Vita Immun Action X30 Tablets',category:'Echinacea',goals:["immune"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Echinacea Liquid Adults 50Ml',category:'Echinacea',goals:["immune"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Ampcare X30 Tablets',category:'Echinacea',goals:["immune"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Evening Primrose oil (EPO) 1300Mg X30 Capsules',category:'Evening Primrose oil (EPO)',goals:["immune", "skin", "weight"],who:["woman"],warnings:{}},
+  {name:'Healthaid Royal 3 Evening Primrose Royal Jelly &amp; Ginseng X30 Capsules',category:'Evening Primrose oil (EPO)',goals:["energy", "skin", "stress"],who:["woman"],warnings:{}},
+  {name:'Healthaid Evening Primrose oil (EPO) 500Mg Capsules',category:'Evening Primrose oil (EPO)',goals:["joint", "skin", "weight", "heart"],who:["woman"],warnings:{}},
+  {name:'Healthaid Fenugreek Extract 300Mg X60 Capsules',category:'Fenugreek',goals:["kids"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Flaxseed Oil 1000Mg X60 Capsules',category:'Flaxseed oil',goals:["heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Folic Acid 400Mcg X 90 Tablets',category:'Folic acid',goals:["immune", "kids", "eye", "energy", "pregnancy"],who:["woman"],warnings:{}},
+  {name:'Natures Aid Folic Acid 400Ug X90 Tablets',category:'Folic acid',goals:["immune", "kids", "eye", "energy", "pregnancy"],who:["woman"],warnings:{}},
+  {name:'Abopholic Meta Folic Acid Tablets X30',category:'Pregnancy supplements',goals:["energy", "joint", "kids", "pregnancy"],who:["woman"],warnings:{}},
+  {name:'Healthaid Ginko Biloba 500Mg x30 Capsules',category:'Ginko Biloba',goals:["kids"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Erba Vita Memo Energy x10 Vials',category:'Ginko Biloba',goals:["energy", "weight", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Green Tea Tablets 1000Mg X60',category:'Green Tea',goals:["kids", "weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Hyaluronic 55Mg X 30 Tablets',category:'Hyaluronic Acid',goals:["immune", "joint", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Igennus Pharmepa Restore X60 Capsules',category:'Omega and Fish oils',goals:["heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Seven Seas JointCare Essential 60 Capsules',category:'Omega and Fish oils',goals:["immune", "joint", "eye", "hair", "skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Igennus Pharmepa Complete X60 Softgels',category:'Omega and Fish oils',goals:["immune", "skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'B-Tonic X 30 Sachets',category:'L-Arginine',goals:["immune", "joint", "weight", "energy", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid L-Arginine/L-Ornithine X60 Tablets',category:'L-Arginine',goals:["immune", "joint", "weight", "hair", "energy", "skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid L-Arginine 500Mg  X60 Tablets',category:'L-Arginine',goals:["immune", "heart", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid L-Glutathione 250Mg X 60 Tablets',category:'L-Glutathione',goals:["weight", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid L-Lysine Vitamin 500mg 60 Tablets',category:'L-Lysine',goals:["immune", "energy", "heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid L-Taurine X60 Tablets',category:'L-Taurine',goals:["energy", "weight", "heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid L-Tyrosine Vitamin 60 Tablets',category:'L-Tyrosine',goals:["energy", "stress"],who:["adult", "woman", "man"],warnings:{thyroid:'⚠️ May affect thyroid hormone levels. Consult your doctor if you have a thyroid condition.'}},
+  {name:'Healthaid Maca 500Mg X60 Tablets',category:'Maca',goals:["energy", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Magnesium Citrate 119Mg X60 Capsules',category:'Magnesium',goals:["joint", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Mio Magnesio Magnesium Citrate (37.5g)',category:'Magnesium',goals:["energy", "joint", "weight", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Magcitra Vitamin X 60Tablets',category:'Magnesium Citrate',goals:["joint", "heart", "sleep", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Magnetrex - Magnesium Bisglycinate X30 Tablets',category:'Magnesium',goals:["energy", "joint", "heart", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Magnesium Bisglycinate 375Mg X60 Tablets',category:'Magnesium',goals:["joint", "heart", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Moringa Leaf Capsules X60',category:'Moringa Leaf',goals:["joint"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid MSM 1000Mg X90 Tablets',category:'MSM (MethylSuphonylMethane)',goals:["joint"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid MSM 1000Mg X90 Tablets',category:'MSM (MethylSuphonylMethane)',goals:["immune", "joint", "hair", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Ultimate Nutrition MSM 1000Mg Tablets X90',category:'MSM (MethylSuphonylMethane)',goals:["immune", "joint", "hair", "gut", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Health Aid Omega 3-6-9 X60 Capsules',category:'Omega and Fish oils',goals:["skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Health Aid Omega 3 750Mg X30 Capsules',category:'Omega and Fish oils',goals:["joint", "skin", "heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Biogena Omega 3 Forte Superior Formula X90 Capsules',category:'Omega and Fish oils',goals:["skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Psyllium Husk Powder (Plantago Ovata) 300G',category:'Psyllium Husk',goals:["immune", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Psyllium Husk 1000Mg X60 Capsules',category:'Psyllium Husk',goals:["immune", "weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Bio 3 Fiber Solution Psyllium Fiber Fruits Peach Flavor X24 Sticks',category:'Weight Loss',goals:["weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Rhodiola 500Mg X 60 Tablets',category:'Rhodiola',goals:["kids", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Saw Palmetto 265mg 30 Tablets',category:'Saw Palmetto',goals:["immune", "hair", "skin"],who:["man"],warnings:{}},
+  {name:'FutureYou Cambridge Ateronon Heart+ Capsules X28',category:'Selenium',goals:["energy", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Revidox X30 Capsules',category:'Selenium',goals:["energy", "skin", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Advancis Essential Vitamins X30 Capsules',category:'Selenium',goals:["immune", "hair", "gut", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid 400Iu Vitamin E X60 Softgels',category:'Vitamin E',goals:["skin", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Multivitamin Effervescent X20 Tablets',category:'Multivitamin',goals:["immune", "energy", "skin", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Vitamin E Oil 50Ml',category:'Vitamin E',goals:["skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Spirulina 500mg 90 Capsules',category:'Spirulina',goals:["energy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Spirulina 500Mg Vitamin X60 Tablets',category:'Spirulina',goals:["energy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Starflower Oil 1000mg X60 Capsules',category:'Starflower oil',goals:["skin", "weight"],who:["adult", "woman"],warnings:{}},
+  {name:'Healthaid Starflower Oil 1000Mg X30 Capsules',category:'Starflower oil',goals:["immune", "joint", "skin", "weight"],who:["adult", "woman"],warnings:{}},
+  {name:'Seven Seas JointCare Supplex & Turmeric 60 Tablets',category:'Multivitamin',goals:["immune", "energy", "joint", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Ginger, Turmeric & Bromelain X60 Capsules',category:'Ginger root',goals:["joint"],who:["adult", "woman", "man"],warnings:{bloodthinners:'⚠️ May interact with blood-thinning medication. Please consult your doctor or pharmacist before use.'}},
+  {name:'Natures Aid Turmeric X30 Capsules',category:'Turmeric',goals:["joint"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Healthaid Valerian Tablets X60',category:'Valerian',goals:["joint", "stress", "gut", "sleep", "energy", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Sederba X30 Capsules',category:'Valerian',goals:["energy", "sleep", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Forte D 4000 X120 Tablets',category:'Vitamin D',goals:["immune", "joint", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Forte D 4000 X60 Tablets',category:'Vitamin D',goals:["immune", "joint", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vitabiotics Ultra Vitamin D 4000Iu X96 Tablets',category:'Vitamin D',goals:["immune", "joint"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Pumpkin Seed Oil 1000Mg X60',category:'Seed oil',goals:["kids"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Health Aid Echinacea Liquid Children 50Ml',category:'Vitamins and health',goals:["immune", "kids"],who:["baby"],warnings:{}},
+  {name:'Vital Proteins Beauty Collagen - Strawberry-Lemon Flavour 271g',category:'Collagen',goals:["hair", "joint", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Liposomal Collagen X30 Sachets',category:'Collagen',goals:["immune", "joint", "stress", "hair", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Collagen Beauty Formula 90 Tablets',category:'Collagen',goals:["immune", "joint", "hair", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Health Aid L-Theanine 200Mg X60 Tablets',category:'L-Theanine',goals:["immune", "stress", "weight", "sleep", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Health Aid L-Carnitine 550Mg 30 Tablets',category:'L-Carnitine',goals:["stress", "weight", "energy", "pregnancy", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vitabiotics Visionace Plus Omega-3 28 Day Supply',category:'Eye supplements',goals:["immune", "joint", "eye", "hair", "energy", "skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vitabiotics Visionace Plus Omega-3 28 Day Supply',category:'Eye supplements',goals:["immune", "joint", "eye", "hair", "energy", "skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vitabiotics Osteocare Plus Omega-3 Dual-Pack 28 Day Supply',category:'Omega and Fish oils',goals:["immune", "joint", "hair", "skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Glucosamine MSM & Chond X180 Tablets',category:'Glucosamine',goals:["joint"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Seven Seas JointCare Max Glucosamine 60 Capsules',category:'Omega and Fish oils',goals:["immune", "joint", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Glucosamine 1500mg 180 Tablets',category:'Glucosamine',goals:["joint"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Mini Drops Multivitamin Orange Flavour 50ml',category:'Vitamins and health',goals:["immune", "joint", "kids", "energy", "skin"],who:["baby"],warnings:{}},
+  {name:'Vitabiotics Wellkid Multivitamin 30 ChewableTablets',category:'Vitamins and health',goals:["immune", "joint", "kids", "energy", "skin", "pregnancy"],who:["baby"],warnings:{}},
+  {name:'Vita Act Multivitamin Junior X10 Vials',category:'Biotin',goals:["immune", "kids", "hair", "energy", "skin"],who:["baby"],warnings:{}},
+  {name:'BetterYou Vitamin K2 180μg 25Ml',category:'Vitamin K',goals:["joint", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Forte Vitamin K2 180 μg 30caps',category:'Vitamin K',goals:["joint", "weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Vitamin K2 100 µg 30 Tablets',category:'Vitamin K',goals:["immune", "joint"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Cod Liver Oil 1000Mg X 90 Softgels',category:'Omega and Fish oils',goals:["immune", "joint", "eye", "skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Enzyme Biotix Tablets X30',category:'Enzymes',goals:["gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Digestive Enzyme Comp X60 Tablets',category:'Enzymes',goals:["gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Enzyme Digest X90 Tablets',category:'Enzymes',goals:["joint", "heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Epo 1000 Mg X90 Softgels',category:'Evening Primrose oil (EPO)',goals:["immune", "skin", "heart"],who:["woman"],warnings:{}},
+  {name:'ORS Hydration Kids Strawberry 24 Soluble Tablets',category:'Rehydration salts',goals:["immune", "kids", "gut", "energy", "heart"],who:["baby"],warnings:{}},
+  {name:'Quest Ubiquinol Qu 10 100Mg X30',category:'Coenzyme Q10',goals:["energy", "heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Igennus Magnesium Glycinate 380Mg X180 Capsules',category:'Magnesium',goals:["energy", "joint", "weight", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Liposomal Magnesium 150mg',category:'Magnesium',goals:["joint", "heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Igennus Triple Magnesium Complex X60 Tablets',category:'Magnesium',goals:["hair", "energy", "joint", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Omega 3 Fish Oil 90 Capsules 1000Mg',category:'Omega and Fish oils',goals:["immune", "kids", "eye", "pregnancy", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Olimp Labs Gold Omega 3 1000Mg Fish Oil X60 Capsules',category:'Omega and Fish oils',goals:["immune", "weight", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Ultimate Nutrition Pure 100% CLA 1000Mg',category:'Conjugated Linoleic Acid (CLA)',goals:["weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vitabiotics Visionace Max 28 Day Supply',category:'Eye supplements',goals:["immune", "joint", "eye", "hair", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vitabiotics Visionace Max 28 Day Supply',category:'Eye supplements',goals:["immune", "joint", "eye", "hair", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Once a Day Vision Life Tablets X30',category:'Eye supplements',goals:["immune", "eye", "hair", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vega Garlic Extract High Strength',category:'Garlic extract',goals:["heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Vitamin B12 1,000mcg X90 Tablets',category:'Vitamin B',goals:["energy", "pregnancy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Pure Encapsulations Vitamin B12 and Folate X30 Capsules',category:'Vitamin B',goals:["energy", "pregnancy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vega Vitamin B12 1000Mcg  Tablets *30',category:'Vitamin B',goals:["immune", "energy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'La Roche-Posay Pigmentclar UV Cream 40Ml',category:'Moisturisers',goals:["hair", "skin", "weight", "eye"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'La Roche-Posay Hyalu B5 Aquagel Spf30 50Ml',category:'Moisturisers',goals:["hair", "skin", "weight", "eye"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'La Roche-Posay Hydraphase HA Rich Moisturiser 50Ml',category:'Moisturisers',goals:["hair", "skin", "eye"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vichy Dercos Aminexil Clinical 5 Anti-Hair Loss Ampoules Men X21',category:'Hair Growth and Hair Loss Treatments',goals:["hair", "skin", "eye"],who:["man"],warnings:{}},
+  {name:'Nourkrin Man X60 Tablets',category:'Hair Growth and Hair Loss Treatments',goals:["hair", "skin", "eye"],who:["adult", "woman", "man"],warnings:{thyroid:'⚠️ May affect thyroid hormone levels. Consult your doctor if you have a thyroid condition.'}},
+  {name:'Crexy Lashes & Brows Gel for the Growth of Eyelashes and Eyebrows 8Ml',category:'Hair Growth and Hair Loss Treatments',goals:["hair", "skin", "eye"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Nourkrin Woman X180 Tablets',category:'Hair Growth and Hair Loss Treatments',goals:["hair", "skin", "eye"],who:["woman"],warnings:{thyroid:'⚠️ May affect thyroid hormone levels. Consult your doctor if you have a thyroid condition.'}},
+  {name:'Vichy Dercos Aminexil Clinical 5 Anti-Hair Loss Ampoules Women X21',category:'Hair Growth and Hair Loss Treatments',goals:["hair", "skin", "eye"],who:["woman"],warnings:{}},
+  {name:'Nourkrin Woman X60 Tablets',category:'Hair Growth and Hair Loss Treatments',goals:["hair", "skin", "eye"],who:["woman"],warnings:{thyroid:'⚠️ May affect thyroid hormone levels. Consult your doctor if you have a thyroid condition.'}},
+  {name:'Lansinoh Milk Storage Bottles X4',category:'Breastfeeding',goals:["kids", "pregnancy"],who:["baby"],warnings:{}},
+  {name:'Multi-Mam Compresses x12',category:'Breastfeeding',goals:["immune", "kids", "pregnancy"],who:["woman"],warnings:{}},
+  {name:'Multi-Mam Nipple Balm 30Ml',category:'Breastfeeding',goals:["kids", "skin", "pregnancy"],who:["woman"],warnings:{}},
+  {name:'Abena Underpads Superydry (5 Drops) x30',category:'Hospital bag essentials',goals:["immune", "kids", "weight", "hair", "pregnancy"],who:["baby"],warnings:{}},
+  {name:'Abena Underpads Ultra Light (1 Drop) x25',category:'Hospital bag essentials',goals:["hair", "kids", "pregnancy"],who:["baby"],warnings:{}},
+  {name:'Chicco Maternity Pads 30Pcs',category:'Hospital bag essentials',goals:["kids", "pregnancy"],who:["baby"],warnings:{}},
+  {name:'Happynose Nasal Aspirator',category:'Nasal decongestion',goals:["kids"],who:["baby"],warnings:{}},
+  {name:'Fitonasal Paediatric Spray 125Ml',category:'Nasal decongestion',goals:["immune", "kids"],who:["baby"],warnings:{}},
+  {name:'Chicco Nasal Aspirator',category:'Nasal decongestion',goals:["kids"],who:["baby"],warnings:{}},
+  {name:'Clearblue Advanced Digital Ovulation Test Kit - 10 tests',category:'Pregnancy and Ovulation tests',goals:["kids", "pregnancy", "eye"],who:["baby"],warnings:{}},
+  {name:'Clearblue Pregnancy Test X2',category:'Pregnancy and Ovulation tests',goals:["kids", "pregnancy"],who:["baby"],warnings:{}},
+  {name:'Clearblue Pregnancy Test With Weeks Indicator Digital Test',category:'Pregnancy and Ovulation tests',goals:["kids", "pregnancy"],who:["baby"],warnings:{}},
+  {name:'Optibac For Pregnancy X30',category:'Pregnancy supplements',goals:["pregnancy", "kids", "weight", "gut"],who:["woman"],warnings:{}},
+  {name:'Quest BioFolic X60 Tablets',category:'Pregnancy supplements',goals:["kids", "pregnancy", "eye"],who:["woman"],warnings:{}},
+  {name:'Vitabiotics Pregnacare Breast-feeding Dual Pack 28 Day Supply',category:'Pregnancy supplements',goals:["immune", "joint", "kids", "energy", "skin", "pregnancy"],who:["woman"],warnings:{}},
+  {name:'Healthaid Evening Primrose oil (EPO) 1000Mg + Vitamin E',category:'Evening Primrose oil (EPO)',goals:["immune", "skin", "weight"],who:["woman"],warnings:{}},
+  {name:'Healthaid Lecithin 1200Mg Capsules',category:'Lecithin',goals:["immune", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Forte Hydra Active X30 Sachets',category:'Rehydration salts',goals:["energy", "kids", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Forte Hydra Lemon X30 Sachets',category:'Rehydration salts',goals:["immune", "energy", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'ORS Hydration Soluble Tablets',category:'Rehydration salts',goals:["energy", "heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Biolek Energast Capsules x60',category:'Sodium Butyrate',goals:["gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Equazen Chews Strawberry Flavour 180 Chewable Capsules 3+ Years',category:'Omega and Fish oils',goals:["kids", "skin", "heart"],who:["baby"],warnings:{}},
+  {name:'Equazen Eye Q Capsules X180',category:'Omega and Fish oils',goals:["kids", "skin", "heart", "eye"],who:["baby"],warnings:{}},
+  {name:'Equazen Eye Q Children\'s Liquid Syrup Citrus 200Ml',category:'Omega and Fish oils',goals:["kids", "heart", "eye"],who:["baby"],warnings:{}},
+  {name:'Medik8 Advanced Night Restore 50Ml',category:'Cream',goals:["hair", "skin", "sleep", "eye"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Medik8 Intelligent Retinol Smoothing Night Cream 50Ml',category:'Cream',goals:["hair", "skin", "eye"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'SVR Clairial Night Peel 50Ml',category:'Cream',goals:["weight", "eye", "hair", "gut", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Optibac Probiotic Everyday Max X30',category:'Probiotics',goals:["weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Optibac Everyday Probiotics X90',category:'Probiotics',goals:["weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Optibac Everyday Probiotics X30',category:'Probiotics',goals:["weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natabiol plus Omega3 X30 Capsules',category:'Pregnancy supplements',goals:["immune", "joint", "kids", "hair", "energy", "skin", "pregnancy", "heart"],who:["woman"],warnings:{}},
+  {name:'Bassetts Multivitamins with Omega 3 for 3-6 Years X30 Chewables',category:'Multivitamin',goals:["energy", "kids", "weight", "heart"],who:["baby"],warnings:{}},
+  {name:'Vicks ZZZQuil Natura Mango & Banana X60 Gummies',category:'Sleep support',goals:["energy", "sleep"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Forte Pharma Fortenuit X30 Tablets',category:'Sleep support',goals:["sleep"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Erba Vita Lietoson Gocce Drops 50Ml',category:'Sleep support',goals:["energy", "sleep", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'ESI Pure Melatonin 1.9mg X60 Gummies',category:'Sleep support',goals:["energy", "sleep", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Melatonin Act Forte Spray 15Ml',category:'Supplements',goals:["energy", "sleep", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Melatonin + Chamomile Act X30 Tea Bags',category:'Supplements',goals:["joint", "heart", "sleep", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Buonerbe Forte Tablets X30',category:'Constipation supplement',goals:["gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Surveal Softlac X30 Tablets',category:'Constipation supplement',goals:["gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Laxit Med Macrogal 4000 10G Adult (Green) X20 Sachets',category:'Constipation supplement',goals:["kids", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Laxit Med Macrogal 4000 5G Paediatric and adults (over 6 months) (Purple) X20 Sachets',category:'Constipation supplement',goals:["kids", "gut"],who:["baby"],warnings:{}},
+  {name:'Mastrelle Flora Plus Capsules',category:'Supplements',goals:["skin", "gut"],who:["woman"],warnings:{}},
+  {name:'Celine X60 Tablets',category:'Alpha lipoic acid',goals:["pregnancy", "weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Laborest Gametogen X20 Sachets',category:'Alpha lipoic acid',goals:["immune", "hair", "gut", "energy", "skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Neurocortex Nervous System Supplement X30 Tablets',category:'Alpha lipoic acid',goals:["immune", "energy", "joint", "pregnancy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Profertil Female X56 Capsules',category:'Fertility',goals:["kids", "eye", "skin", "pregnancy", "heart"],who:["woman"],warnings:{thyroid:'⚠️ May affect thyroid hormone levels. Consult your doctor if you have a thyroid condition.'}},
+  {name:'Quest Calmbiotix X30 Capsules',category:'L-Theanine',goals:["joint", "stress", "hair", "gut", "sleep", "energy", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Forte Pharma Immuvit Junior 4G X30 Chewable Tablets',category:'Baby and Child health',goals:["immune", "joint", "kids", "hair", "skin"],who:["baby"],warnings:{}},
+  {name:'Calpol Vapour Plug & Nightlight & 3 Refill Pads',category:'Baby and Child health',goals:["kids"],who:["baby"],warnings:{}},
+  {name:'Erba Vita Immuno B 150Ml',category:'Baby and Child health',goals:["immune", "kids", "hair", "skin"],who:["baby"],warnings:{}},
+  {name:'Nupo Diet Shake | Caffe Latte 12x32g',category:'Weight Loss',goals:["immune", "weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Nupo Diet Shake | Chocolate 12x32g',category:'Weight Loss',goals:["immune", "weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Nupo Diet Shake | Blueberry Raspberry 960g',category:'Weight Loss',goals:["immune", "weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'XtraSlim 700 Woman',category:'Weight Loss',goals:["joint", "weight"],who:["woman"],warnings:{}},
+  {name:'XtraSlim 700 Woman 45+',category:'Weight Loss',goals:["joint", "weight", "gut"],who:["woman"],warnings:{}},
+  {name:'Lyprinol Capsules x60',category:'Marine Lipid Oil',goals:["joint", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Pure Encapsulations A.I Formula X30 Capsules',category:'Ginger root',goals:["immune", "energy", "joint"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'ActiJoints X60 Capsules',category:'Ginger root',goals:["immune", "joint", "weight", "gut", "energy", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Bioithas Woman Probiotics X30 Capsules',category:'Probiotics',goals:["immune", "joint", "weight", "hair", "gut", "energy", "pregnancy"],who:["woman"],warnings:{}},
+  {name:'Chewy Vites Super Foods Apple Cider Vinegar X60',category:'Vitamin B',goals:["immune", "energy", "weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Erba Vita Aceto di Mele (Apple Cider Vinegar) x60 Capsules',category:'Apple Cider Vinegar',goals:["weight", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Florea Natural Intestinal Lactobacillus X30 Capsules',category:'Probiotics',goals:["weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Nestle Modulen IBD 400g',category:'Adult Medical Nutrition',goals:["joint", "gut", "eye"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Resource Diabet Plus Strawberry 4X200Ml',category:'Adult Medical Nutrition',goals:["weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Resource Diabet Plus Vanilla 4X200Ml',category:'Adult Medical Nutrition',goals:["weight", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Chewy Vites Kids Multi Vitamin + Probiotic X60',category:'Vitamins and health',goals:["energy", "kids", "gut", "eye"],who:["baby"],warnings:{}},
+  {name:'Proven Probiotics for Pregnancy, Plus Multivitamins, Minerals & DHA',category:'Multivitamin',goals:["kids", "gut", "energy", "pregnancy", "heart"],who:["woman"],warnings:{}},
+  {name:'Proven Probiotics Fit for School X30 Chewable Tablets',category:'Multivitamin',goals:["immune", "energy", "kids", "gut"],who:["baby"],warnings:{}},
+  {name:'Nestle Alfaré 400g',category:'Food and Milk',goals:["kids"],who:["baby"],warnings:{}},
+  {name:'Philips Avent Reusable Breast Milk Storage Cups (5 x 180 ml)',category:'Food and Milk',goals:["kids", "weight"],who:["baby"],warnings:{}},
+  {name:'Philips Avent Milk Powder Dispenser',category:'Food and Milk',goals:["kids", "weight"],who:["baby"],warnings:{}},
+  {name:'Phillips Avent Bottle Brush 2 in 1',category:'Bottles and Teats',goals:["kids"],who:["baby"],warnings:{}},
+  {name:'Advancis Cholesterim Ultra X30 Capsules',category:'Plant sterols',goals:["energy", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Proven Women’s Lactobacillus and Bifidus with Cranberry X30 Capsules',category:'Supplements',goals:["kids", "gut", "stress"],who:["woman"],warnings:{}},
+  {name:'Maxivita Exclusive Lutein Forte+ x45',category:'Vitamins',goals:["eye", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Chewy Vites Adults Hair Skin & Nails X60',category:'Vitamins',goals:["immune", "hair", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Biogena Nutrifem PMS Formula X60 Capsules',category:'Iron',goals:["hair", "energy", "joint", "heart"],who:["woman"],warnings:{}},
+  {name:'Active Iron For Women X60 Capsules',category:'Iron',goals:["hair", "energy", "gut"],who:["woman"],warnings:{default:'⚠️ Do not take iron supplements without confirmed low iron levels. Check with your doctor if unsure.'}},
+  {name:'Mustela Certified Organic Hydrating Cream Face and Body 150Ml',category:'Skin care',goals:["kids", "skin", "weight"],who:["baby"],warnings:{}},
+  {name:'Mustela Baby Massage Oil 100Ml',category:'Skin care',goals:["kids", "skin", "stress"],who:["baby"],warnings:{}},
+  {name:'Mushrooms For Life Organic Lion\'s Mane Capsules X60',category:'Supplements',goals:["weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Weightworld Lions Mane Mushroom with Black Pepper X365 Tablets',category:'Supplements',goals:["weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Weightworld Berberine X120 Capsules',category:'Supplements',goals:["weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Intermed Dry Ear Drops 10Ml',category:'Ear Care',goals:["immune", "hair", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vital Proteins Collagen Peptides 567g',category:'Collagen',goals:["hair", "joint", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vital Proteins Collagen Peptides Cocoa Flavour 297g',category:'Collagen',goals:["hair", "joint", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Vital Proteins Collagen Peptides X10 Sachets',category:'Collagen',goals:["hair", "joint", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Caregyn EmulGel 100ml',category:'Gel',goals:["kids", "eye", "hair", "skin", "pregnancy"],who:["woman"],warnings:{}},
+  {name:'Healthaid Black Seed Oil 1000Mg x60 Capsules',category:'Black Seed Oil',goals:["immune", "stress", "hair", "gut", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Biocinalis+ Neuronal X30 Capsules',category:'Folic acid',goals:["energy", "pregnancy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Pure Encapsulations Folic Acid X30 Capsules',category:'Folic acid',goals:["energy", "pregnancy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Scarban Elastic Silicone Sheet C-SECTION Recovery Kit',category:'Pregnancy & Maternity',goals:["kids", "eye", "hair", "skin", "pregnancy"],who:["woman"],warnings:{}},
+  {name:'Quest Liposomal Curcumin 600mg',category:'Turmeric',goals:["immune", "joint", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natroceutics Curcumin Complete X30 Capsules',category:'Supplements',goals:["joint", "weight"],who:["adult", "woman", "man"],warnings:{bloodthinners:'⚠️ May interact with blood-thinning medication. Please consult your doctor or pharmacist before use.'}},
+  {name:'Pure Encapsulations Immunity X30 Capsules',category:'Quercetin',goals:["immune", "joint", "hair", "skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Igennus L-Methylfolate 400Mcg X180 Tablets',category:'L-Methylfolate',goals:["pregnancy"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Quest Forte Hydra Creatine X30 Sachets',category:'Creatine',goals:["immune", "joint", "weight", "hair", "energy", "skin", "pregnancy", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Health Aid Creatine Monohydrate 1000mg X60 Tablets',category:'Creatine',goals:["energy", "weight", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Prolife Paediatric Live Lactic Ferments Supplement 10 Bottles of 8ML',category:'Vitamin B',goals:["immune", "joint", "kids", "gut", "energy"],who:["baby"],warnings:{}},
+  {name:'Healthaid Serrapeptase 60000iu X30 Capsules',category:'Serrapeptase',goals:["immune", "joint", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Calcify Padina Pavonica Capsules X30',category:'Calcium',goals:["hair", "joint", "skin"],who:["woman"],warnings:{}},
+  {name:'Guam Brittania Cell X30 Sachets',category:'Water Retention',goals:["immune", "skin", "weight"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Drain Away Water Retention Capsules X60',category:'Water Retention',goals:["immune"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Erba Vita Multivitamin Kids Gummies X30',category:'Multivitamin',goals:["immune", "joint", "kids", "weight", "energy"],who:["baby"],warnings:{}},
+  {name:'Forté Pharma Forté Détox 5 Global Action 500Ml',category:'Minerals',goals:["skin"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Forté Pharma Turbo Draine Pineapple 500Ml',category:'Minerals',goals:["immune", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Zymerex Colon & Stress Regulator  X24 + 6 tablets',category:'Minerals',goals:["weight", "gut", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Natures Aid Beta-Glucans Immune Support+ Tablets X30',category:'Garlic extract',goals:["immune", "joint", "hair", "gut", "skin", "heart"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Alta Natura Ansiophil Quick Spray 20Ml',category:'Griffonia',goals:["weight", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Active B Complex + For Women X30 Capsules',category:'Biotin',goals:["immune", "weight", "hair", "energy", "skin", "pregnancy"],who:["woman"],warnings:{}},
+  {name:'GSE Aerobiotic Junior',category:'Nebulisers',goals:["immune", "joint", "kids"],who:["baby"],warnings:{}},
+  {name:'Chewy Vites Kids Magnesium X60',category:'Magnesium',goals:["joint", "kids", "weight", "gut", "energy", "heart"],who:["baby"],warnings:{}},
+  {name:'Bio 3 Chamomile Tea X25 Bags',category:'New Arrivals',goals:["heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Maraviglia Chamomile Tea X20 Bags',category:'New Arrivals',goals:["heart", "gut"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Manuka Health Manuka Honey with Propolis MGO 400+ X15 Drops',category:'Vitamin C',goals:["immune"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Manuka Health Manuka Honey Lemon MGO 400+ X15 Drops',category:'Vitamin C',goals:["immune", "stress"],who:["adult", "woman", "man"],warnings:{}},
+  {name:'Manuka Health Manuka Honey Ginger & Lemon MGO 400+ X15 Drops',category:'Vitamin C',goals:["immune"],who:["adult", "woman", "man"],warnings:{}},
 ];
+function getWhy(product, goal) {
+  const n = product.name.toLowerCase();
+  const is = (kw) => kw.split('|').some(k => n.includes(k));
+  const isMg = is('magnesium');
+  const isVitD = is('vitamin d|d3 |d 3|vit d');
+  const isVitC = is('vitamin c|vit c');
+  const isVitB = is('vitamin b|b12|b-12|b complex|berocca');
+  const isOmega = is('omega|fish oil|cod liver|marine lipid');
+  const isCollagen = is('collagen');
+  const isIron = is('iron|ferrous|spatone|floradix');
+  const isZinc = is('zinc');
+  const isBiotin = is('biotin');
+  const isGlucosamine = is('glucosamine|chondroitin');
+  const isAshwagandha = is('ashwagandha');
+  const isRhodiola = is('rhodiola');
+  const isMelatonin = is('melatonin');
+  const isValerian = is('valerian');
+  const isCoQ10 = is('coq10|coenzyme q10|ubiquinol');
+  const isProbiotic = is('probiotic|lactobacillus|bifidobacterium|optibac|actigut|biogaia');
+  const isTurmeric = is('turmeric|curcumin');
+  const isGarlic = is('garlic');
+  const isGreenTea = is('green tea');
+  const isCarnitine = is('l-carnitine|carnitine');
+  const isEchinacea = is('echinacea');
+  const isTheanine = is('theanine|l-theanine');
+  const isMulti = is('multivitamin|multi vitamin|multi-vitamin|centrum|wellwoman|wellman|pregnacare|actigel|magic beans|chewy vites');
+  const isSpirulina = is('spirulina|moringa');
+  const isPlantSterol = is('plant sterol');
+  const isAloe = is('aloe vera');
+  const isHyaluronic = is('hyaluronic');
+  const isCranberry = is('cranberry');
+  const isCalcium = is('calcium|osteocare');
+  const isFolic = is('folic acid|folate');
+  const isEPO = is('evening primrose|starflower');
+  const pName = product.name;
+  switch(goal) {
+    case 'sleep':
+      if (isMelatonin) return 'Melatonin is one of the most effective ways to reset your sleep cycle and fall asleep faster. This formula helps you drift off more naturally each night.';
+      if (isValerian) return 'Valerian root is a well-studied natural sleep aid that promotes deeper, more restful sleep without morning grogginess.';
+      if (isMg) return 'Magnesium calms the nervous system and helps your body wind down naturally at night — low magnesium is one of the most common reasons for poor sleep.';
+      if (isAshwagandha) return 'Ashwagandha lowers cortisol, making it easier to mentally switch off and fall into deeper sleep at night.';
+      if (isTheanine) return 'L-Theanine promotes calm relaxation without sedation, helping quiet a busy mind before bedtime.';
+      return pName + ' is formulated to support restful, quality sleep.';
+    case 'stress':
+      if (isAshwagandha) return 'Ashwagandha is one of the most researched adaptogens — it lowers cortisol and helps you feel calmer and more resilient throughout busy days.';
+      if (isRhodiola) return 'Rhodiola is a clinically studied adaptogen that improves your body\'s ability to handle stress and reduces mental fatigue.';
+      if (isMg) return 'Magnesium plays a direct role in regulating stress — low levels are closely linked to anxiety and tension, and many people are deficient without knowing it.';
+      if (isTheanine) return 'L-Theanine promotes calm, focused alertness and takes the edge off daily stress without causing drowsiness.';
+      if (isVitB) return 'B vitamins are essential for nervous system health. Deficiency is directly linked to stress, low mood, and irritability.';
+      if (isEPO) return 'Evening primrose oil supports hormonal balance and can help ease stress-related symptoms, especially in women.';
+      return pName + ' supports your body\'s natural response to stress and tension.';
+    case 'energy':
+      if (isIron) return 'Iron deficiency is one of the most common causes of persistent fatigue. This formula restores your levels effectively so you can feel like yourself again.';
+      if (isVitB) return 'B vitamins are the foundation of energy production at a cellular level — one of the most direct supplements for fighting ongoing fatigue and tiredness.';
+      if (isCoQ10) return 'CoQ10 is essential for energy production in every cell. Particularly valuable over 40, as natural CoQ10 levels decline significantly with age.';
+      if (isVitD) return 'Low vitamin D is directly linked to fatigue and low mood. Correcting a deficiency can make a noticeable difference in energy within weeks.';
+      if (isMg) return 'Low magnesium is one of the most overlooked causes of fatigue. This highly absorbable form restores your levels gently and effectively.';
+      if (isMulti) return 'A comprehensive multivitamin fills the nutritional gaps that often cause fatigue — a simple daily foundation for sustained energy.';
+      if (isSpirulina) return 'Spirulina is a nutrient-dense natural energy booster — packed with protein, B vitamins, and antioxidants for sustained vitality without caffeine.';
+      if (isCarnitine) return 'L-Carnitine helps transport fats into cells for energy — popular for reducing fatigue and supporting active, demanding lifestyles.';
+      return pName + ' supports sustained energy and reduces everyday tiredness.';
+    case 'immune':
+      if (isVitC) return 'Vitamin C is one of the most important nutrients for immune function and helps protect your body year-round, especially during cold and flu season.';
+      if (isVitD) return 'Vitamin D is critical for a strong immune response — deficiency is extremely common and directly weakens your body\'s ability to fight infection.';
+      if (isZinc) return 'Zinc is essential for immune defence and one of the first things to reach for at the first sign of illness. A fast and effective immune booster.';
+      if (isEchinacea) return 'Echinacea is clinically shown to shorten colds and strengthen immune resilience. A must-have during cold and flu season.';
+      if (isProbiotic) return 'Around 70% of your immune system lives in your gut. A high-quality probiotic like this supports immunity directly from the inside out.';
+      if (isMulti) return 'A well-balanced multivitamin provides the key immune nutrients — C, D, and zinc — that your body depends on every day.';
+      return pName + ' supports a strong and resilient immune system.';
+    case 'gut':
+      if (isProbiotic) return 'This probiotic restores beneficial bacteria in your gut microbiome — great for digestion, bloating, and ongoing gut comfort.';
+      if (isAloe) return 'Aloe vera has natural soothing properties for the gut lining and supports regularity and digestive comfort.';
+      if (isCranberry) return 'Cranberry helps maintain a healthy bacterial balance in the gut and urinary tract.';
+      if (is('psyllium|constipation')) return 'Natural fibre that supports regular bowel movements and relieves digestive discomfort gently and effectively.';
+      if (is('enzyme')) return 'Digestive enzymes help break down food more efficiently, reducing bloating and discomfort after meals.';
+      return pName + ' supports digestive health, gut comfort, and regularity.';
+    case 'skin':
+      if (isCollagen) return 'Collagen provides the structural proteins your skin needs for firmness and elasticity. Daily use delivers visible improvement in skin texture and glow over time.';
+      if (isHyaluronic) return 'Hyaluronic acid keeps skin deeply hydrated from within, improving plumpness and helping smooth the appearance of fine lines.';
+      if (isBiotin) return 'Biotin is a key B vitamin for skin clarity and texture, often helping with blemish-prone or dull skin.';
+      if (isZinc) return 'Zinc supports skin repair and is particularly effective for blemish-prone or irritated skin conditions.';
+      if (isEPO) return 'Evening primrose oil is rich in essential fatty acids that nourish skin from within, improving hydration and reducing inflammation.';
+      if (isVitC) return 'Vitamin C is a powerful antioxidant that brightens skin tone, boosts collagen production, and protects against daily oxidative damage.';
+      if (is('cerave|ceramide')) return 'CeraVe is dermatologist-developed with ceramides and hyaluronic acid — one of the best everyday moisturisers for healthy, comfortable skin.';
+      if (is('la roche|avene|vichy|uriage|svr')) return 'A dermatologist-recommended formula that strengthens the skin barrier, soothes sensitivity, and maintains long-lasting hydration.';
+      return pName + ' supports healthy, radiant, well-nourished skin.';
+    case 'hair':
+      if (isBiotin) return 'Biotin is one of the most important nutrients for hair strength and growth — daily use helps reduce breakage and supports thicker hair over time.';
+      if (is('pantogar')) return 'Pantogar is a clinically formulated supplement specifically for hair and nail health — one of the most trusted and effective products for visible results.';
+      if (isIron) return 'Low iron is a leading cause of hair thinning, especially in women. Restoring iron levels is one of the most effective ways to improve hair density.';
+      if (isCollagen) return 'Collagen provides the building blocks for stronger, thicker hair — many people notice less breakage and improved shine within 4–6 weeks.';
+      if (isZinc) return 'Zinc deficiency is a common but overlooked cause of hair thinning. This supplement supports healthy hair follicle function.';
+      if (isMulti) return 'A comprehensive multivitamin covers multiple nutrients linked to hair health — including B vitamins, zinc, and vitamin D.';
+      return pName + ' supports stronger, healthier hair growth.';
+    case 'joint':
+      if (isGlucosamine) return 'Glucosamine is one of the most evidence-backed supplements for joint health — it supports cartilage repair and reduces stiffness with regular long-term use.';
+      if (isCollagen) return 'Collagen is a key structural protein in joints and cartilage. Regular supplementation helps maintain flexibility and reduce discomfort.';
+      if (isMg) return 'Magnesium supports muscle relaxation and joint comfort — particularly effective for cramps and stiffness after physical activity.';
+      if (isOmega) return 'Omega-3 fatty acids have strong anti-inflammatory properties that are highly effective for reducing joint stiffness and pain.';
+      if (isTurmeric) return 'Turmeric (curcumin) is one of the most studied natural anti-inflammatories — excellent for ongoing joint comfort and reducing chronic inflammation.';
+      if (isCalcium) return 'Calcium is the primary mineral for bone density and strength, and works best when combined with vitamin D and magnesium for complete joint and bone support.';
+      if (is('msm')) return 'MSM is a natural compound that supports connective tissue health and has anti-inflammatory effects in joints and muscles.';
+      return pName + ' supports joint comfort, flexibility, and mobility.';
+    case 'heart':
+      if (isOmega) return 'Omega-3 fatty acids are one of the most evidence-backed supplements for heart health — supporting healthy cholesterol levels and blood pressure.';
+      if (isCoQ10) return 'CoQ10 is vital for heart muscle energy production and is especially important for cardiovascular health if you take statins.';
+      if (isPlantSterol) return 'Plant sterols are clinically proven to reduce LDL cholesterol — a simple, effective daily addition to a heart-healthy routine.';
+      if (isGarlic) return 'Garlic has well-established benefits for blood pressure and cardiovascular health — this concentrated extract provides an effective daily dose.';
+      if (isMg) return 'Magnesium is essential for normal heart rhythm and blood pressure regulation — one of the most important minerals for cardiovascular health.';
+      if (isCalcium) return 'Calcium and vitamin D together support bone density and healthy blood pressure, covering key cardiovascular health markers.';
+      return pName + ' supports cardiovascular health and healthy heart function.';
+    case 'weight':
+      if (is('meal replacement|nupo')) return 'This nutritionally complete meal replacement controls calorie intake without sacrificing nutrition — a practical, sustainable approach to weight management.';
+      if (isGreenTea) return 'Green tea extract supports fat metabolism and has a mild thermogenic effect, making it a useful complement to a healthy, calorie-controlled diet.';
+      if (isCarnitine) return 'L-Carnitine helps transport fatty acids into cells for energy — popular for supporting fat loss alongside regular exercise.';
+      if (is('apple cider')) return 'Apple cider vinegar is associated with better blood sugar management and reduced appetite — a simple daily support for healthy weight.';
+      if (is('cla|conjugated linoleic')) return 'CLA supports body composition by helping reduce fat storage while maintaining lean muscle mass.';
+      if (is('chromium')) return 'Chromium helps regulate blood sugar and insulin sensitivity, which can reduce cravings and support healthy weight management.';
+      return pName + ' supports healthy weight management as part of a balanced lifestyle.';
+    case 'kids':
+      if (is('biogaia')) return 'BioGaia is one of the most clinically researched probiotics for babies — shown to reduce colic and support a healthy gut microbiome from the start.';
+      if (isMulti || is('magic beans|chewy vites|actikid')) return 'A complete children\'s multivitamin covering all the essential nutrients growing kids need for energy, immunity, and healthy development.';
+      if (isVitD) return 'Vitamin D is critical for bone development and immune function in children. Many kids are deficient, especially during winter months.';
+      if (isProbiotic) return 'A probiotic designed for children helps establish a healthy gut microbiome early — supporting digestion and immune health.';
+      return pName + ' is specially formulated to support children\'s health and development.';
+    case 'pregnancy':
+      if (isFolic) return 'Folic acid is essential in early pregnancy for healthy neural tube development — one of the most important supplements to start before and during pregnancy.';
+      if (is('gestarelle|pregnacare|pregnancy')) return 'A comprehensive pregnancy supplement providing all the key nutrients both mother and baby need throughout every trimester.';
+      if (isOmega) return 'Omega-3 DHA is crucial for baby\'s brain and eye development, and safe to take throughout pregnancy.';
+      return pName + ' provides essential nutrients to support a healthy pregnancy.';
+    case 'eye':
+      if (is('lutein|zeaxanthin')) return 'Lutein and zeaxanthin are the most important antioxidants for macular health — they filter harmful blue light and protect eyes from age-related damage.';
+      if (isOmega) return 'Omega-3 fatty acids are linked to reduced dry eye symptoms and support healthy visual function.';
+      return pName + ' supports healthy vision and long-term eye health.';
+    default:
+      return pName + ' is a quality health supplement from our Health Needs range.';
+  }
+}
+
 
 function getRecommendations() {
   const freeText = document.getElementById('freeText').value.trim();
@@ -611,7 +770,7 @@ function getRecommendations() {
   const recs = top3.map((item, i) => {
     const p = item.product;
     const primaryGoal = allGoals.find(g => p.goals.includes(g));
-    const why = (primaryGoal && p.why[primaryGoal]) ? p.why[primaryGoal] : p.why.default;
+    const why = getWhy(p, primaryGoal);
 
     // Find applicable warning
     let warning = null;
