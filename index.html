@@ -215,19 +215,32 @@ document.querySelectorAll('.who-btn').forEach(btn => {
 function parseGoalsFromText(text) {
   const t = text.toLowerCase();
   const goals = [];
-  if (/sleep|insomnia|wake|tired at night|can't sleep|slaap/.test(t)) goals.push('sleep');
-  if (/energy|tired|fatigue|exhausted|low energy|vermoeid/.test(t)) goals.push('energy');
-  if (/stress|anxiet|nervous|overwhelm|burnout|worried/.test(t)) goals.push('stress');
-  if (/immune|sick|cold|flu|virus|infection|illness/.test(t)) goals.push('immune');
-  if (/gut|digest|bloat|stomach|bowel|ibs|constipat|diarrhea/.test(t)) goals.push('gut');
-  if (/skin|acne|glow|moistur|dry skin|rash|complexion/.test(t)) goals.push('skin');
-  if (/hair|nail|thinning|breakage|bald/.test(t)) goals.push('hair');
-  if (/weight|slim|fat|diet|calories|lose weight/.test(t)) goals.push('weight');
-  if (/joint|muscle|pain|cramp|stiff|arthritis|ache/.test(t)) goals.push('joint');
-  if (/heart|blood pressure|cardiovascular|cholesterol/.test(t)) goals.push('heart');
-  if (/kid|child|baby|toddler|infant/.test(t)) goals.push('kids');
-  if (/pregnan|expecting|trimester|maternity/.test(t)) goals.push('pregnancy');
-  if (/eye|vision|sight|lutein|macular|dry eye/.test(t)) goals.push('eye');
+  // Sleep
+  if (/sleep|insomnia|wake up|can.t sleep|slaap|wakker|nachtrust|restless night|slecht slapen|moeilijk inslapen/.test(t)) goals.push('sleep');
+  // Energy
+  if (/energy|tired|fatigue|exhaust|sluggish|drained|lethargic|low energy|no energy|vermoeid|moe\b|uitgeput|energieloos|fut/.test(t)) goals.push('energy');
+  // Stress / burnout
+  if (/stress|anxiet|nervous|overwhelm|burn|panic|tension|worried|depress|low mood|angstig|gestrest|spanning|zenuw|opgebrand|overspann|piekeren|somber/.test(t)) goals.push('stress');
+  // Immune
+  if (/immun|sick|cold\b|flu\b|virus|infection|illness|weerstand|ziek|verkoud|griep|immuun|vatbaar/.test(t)) goals.push('immune');
+  // Gut / digestive
+  if (/gut|digest|bloat|stomach|bowel|ibs|constipat|diarr|buik|spijsverter|opgeblazen|darm|stoelgang|verstopp|winderig/.test(t)) goals.push('gut');
+  // Skin
+  if (/skin|acne|glow|moistur|dry skin|rash|complexion|huid|droge huid|acné|teint|puistjes|eczeem|rimpels/.test(t)) goals.push('skin');
+  // Hair & nails
+  if (/hair|nail|thinning|breakage|bald|haar|nagel|haaruitval|dunner wordend|kaalheid/.test(t)) goals.push('hair');
+  // Weight
+  if (/weight|slim|fat\b|diet|calori|lose weight|gewicht|afvallen|dik\b|slank|vermageren|obesit/.test(t)) goals.push('weight');
+  // Joint / muscle
+  if (/joint|muscle|pain|cramp|stiff|arthritis|ache|sore|gewricht|spier|pijn|kramp|stijf|gewrichtspijn|spierpijn/.test(t)) goals.push('joint');
+  // Heart
+  if (/heart|blood pressure|cardiovascular|cholesterol|hart|bloeddruk|cardiovasculair|cholesterol/.test(t)) goals.push('heart');
+  // Kids
+  if (/kid|child|baby|toddler|infant|kind\b|baby|peuter|kleuter|kinderen/.test(t)) goals.push('kids');
+  // Pregnancy
+  if (/pregnan|expecting|trimester|maternity|zwanger|bevallen|prenataal/.test(t)) goals.push('pregnancy');
+  // Eye
+  if (/eye|vision|sight|lutein|macular|dry eye|oog|zicht|gezichtsvermogen/.test(t)) goals.push('eye');
   return goals;
 }
 
@@ -235,12 +248,12 @@ function parseGoalsFromText(text) {
 function parseConditions(text) {
   const t = text.toLowerCase();
   const conditions = [];
-  if (/pregnan|expecting|trimester/.test(t)) conditions.push('pregnant');
-  if (/blood thinn|warfarin|anticoagul|aspirin daily/.test(t)) conditions.push('bloodthinners');
-  if (/kidney|renal/.test(t)) conditions.push('kidney');
-  if (/diabetes|diabetic|insulin|blood sugar/.test(t)) conditions.push('diabetes');
-  if (/thyroid/.test(t)) conditions.push('thyroid');
-  if (/breastfeed|nursing|lactating/.test(t)) conditions.push('breastfeeding');
+  if (/pregnan|expecting|trimester|zwanger/.test(t)) conditions.push('pregnant');
+  if (/blood thinn|warfarin|anticoagul|aspirin daily|bloedverdunner/.test(t)) conditions.push('bloodthinners');
+  if (/kidney|renal|nier/.test(t)) conditions.push('kidney');
+  if (/diabet|insulin|blood sugar|bloedsuiker/.test(t)) conditions.push('diabetes');
+  if (/thyroid|schildklier/.test(t)) conditions.push('thyroid');
+  if (/breastfeed|nursing|lactating|borstvoeding/.test(t)) conditions.push('breastfeeding');
   if (/allerg|intoleran|celiac|gluten/.test(t)) conditions.push('allergy');
   return conditions;
 }
